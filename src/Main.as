@@ -3,6 +3,10 @@
 
 const string title = "\\$FFF" + Icons::Trophy + "\\$G Trophy Estimator";
 
+void Main() {
+    startnew(ReadQualiRank);
+}
+
 void RenderMenu() {
     if (UI::MenuItem(title, "", S_Show))
         S_Show = !S_Show;
