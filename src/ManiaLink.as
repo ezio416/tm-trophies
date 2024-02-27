@@ -23,11 +23,11 @@ void ReadQualiRank() {
             if (Layer is null || Layer.LocalPage is null || Layer.LocalPage.MainFrame is null)
                 continue;
 
-            CGameManialinkControl@ Owner = CMAP.UILayers[i].LocalPage.MainFrame.GetFirstChild("frame-score-owner");
+            CGameManialinkFrame@ Owner = cast<CGameManialinkFrame@>(CMAP.UILayers[i].LocalPage.MainFrame.GetFirstChild("frame-score-owner"));
             if (Owner is null)
                 continue;
 
-            CGameManialinkControl@ LabelRank = cast<CGameManialinkFrame@>(Owner).GetFirstChild("label-rank");
+            CGameManialinkControl@ LabelRank = Owner.GetFirstChild("label-rank");
             if (LabelRank is null)
                 continue;
 
