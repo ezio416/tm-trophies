@@ -29,11 +29,11 @@ void ReadQualiRank() {
 
             CGameManialinkControl@ LabelRank = Owner.GetFirstChild("label-rank");
             if (LabelRank is null)
-                continue;
+                break;
 
             CControlLabel@ Control = cast<CControlLabel@>(LabelRank.Control);
             if (Control is null)
-                continue;
+                break;
 
             rank = Text::ParseInt(Control.Label);
 
