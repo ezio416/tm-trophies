@@ -1,5 +1,5 @@
 // c 2024-02-16
-// m 2024-02-16
+// m 2024-02-26
 
 const string title = "\\$FFF" + Icons::Trophy + "\\$G Trophy Estimator";
 
@@ -35,14 +35,14 @@ void Tab_CotdQuali() {
 }
 
 int cotdKnockoutPlayers = 0;
-int cotdKnockoutDiv = 0;
+int cotdKnockoutDiv     = 0;
 int cotdKnockoutDivRank = 0;
 void Tab_CotdKnockout() {
     if (!UI::BeginTabItem("COTD Knockout"))
         return;
 
     cotdKnockoutPlayers = UI::InputInt("players", cotdKnockoutPlayers);
-    cotdKnockoutDiv = UI::InputInt("div", cotdKnockoutDiv);
+    cotdKnockoutDiv     = UI::InputInt("div", cotdKnockoutDiv);
     cotdKnockoutDivRank = UI::InputInt("div rank", cotdKnockoutDivRank);
 
     UI::Text("trophies for rank " + cotdKnockoutDivRank + " of div " + cotdKnockoutDiv + ": " + InsertSeparators(CotdKnockoutTrophies(cotdKnockoutPlayers, cotdKnockoutDiv, cotdKnockoutDivRank)));
@@ -63,14 +63,14 @@ void Tab_CotdRerunQuali() {
 }
 
 int cotdRerunKnockoutPlayers = 0;
-int cotdRerunKnockoutDiv = 0;
+int cotdRerunKnockoutDiv     = 0;
 int cotdRerunKnockoutDivRank = 0;
 void Tab_CotdRerunKnockout() {
     if (!UI::BeginTabItem("COTD Rerun Knockout"))
         return;
 
     cotdRerunKnockoutPlayers = UI::InputInt("players", cotdRerunKnockoutPlayers);
-    cotdRerunKnockoutDiv = UI::InputInt("div", cotdRerunKnockoutDiv);
+    cotdRerunKnockoutDiv     = UI::InputInt("div", cotdRerunKnockoutDiv);
     cotdRerunKnockoutDivRank = UI::InputInt("div rank", cotdRerunKnockoutDivRank);
 
     UI::Text("trophies for rank " + cotdRerunKnockoutDivRank + " of div " + cotdRerunKnockoutDiv + ": " + InsertSeparators(CotdRerunKnockoutTrophies(cotdRerunKnockoutPlayers, cotdRerunKnockoutDiv, cotdRerunKnockoutDivRank)));
