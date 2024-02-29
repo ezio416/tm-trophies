@@ -4,3 +4,6 @@ author = "Ezio"
 category = "Developer"
 version = "0.1.0"
 siteid = 511
+
+[script]
+dependencies = [ "MLHook", "MLFeedRaceData" ]
