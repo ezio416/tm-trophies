@@ -1,5 +1,5 @@
 // c 2024-02-16
-// m 2024-02-17
+// m 2024-02-29
 
 const int trophy1 = 1;
 const int trophy2 = 10;
@@ -11,11 +11,11 @@ const int trophy7 = 1000000;
 const int trophy8 = 10000000;
 const int trophy9 = 100000000;
 
-float TopPercentage(int totalPlayers, int div) {
-    if (totalPlayers < 1 || div < 1)
+float TopPercentage(int players, int div) {
+    if (players < 1 || div < 1)
         return 0.0f;
 
-    return float(div) / Math::Ceil(float(totalPlayers) / 64.0f);
+    return float(div) / Math::Ceil(float(players) / 64.0f);
 }
 
 int CotdQualifierTrophies(int rank) {
@@ -35,8 +35,8 @@ int CotdQualifierTrophies(int rank) {
     return trophy6;
 }
 
-int CotdKnockoutTrophies(int totalPlayers, int div, int divRank) {
-    if (totalPlayers < 1 || div < 1 || divRank < 1)
+int CotdKnockoutTrophies(int players, int div, int divRank) {
+    if (players < 1 || div < 1 || divRank < 1)
         return 0;
 
     if (div == 1) {
@@ -48,7 +48,7 @@ int CotdKnockoutTrophies(int totalPlayers, int div, int divRank) {
         return trophy7;
     }
 
-    float percent = TopPercentage(totalPlayers, div);
+    float percent = TopPercentage(players, div);
 
     // top 100%
     if (percent > 0.5) {
@@ -103,8 +103,8 @@ int CotdRerunQualifierTrophies(int rank) {
     return trophy5 * 5;
 }
 
-int CotdRerunKnockoutTrophies(int totalPlayers, int div, int divRank) {
-    if (totalPlayers < 1 || div < 1 || divRank < 1)
+int CotdRerunKnockoutTrophies(int players, int div, int divRank) {
+    if (players < 1 || div < 1 || divRank < 1)
         return 0;
 
     if (div == 1) {
@@ -117,7 +117,7 @@ int CotdRerunKnockoutTrophies(int totalPlayers, int div, int divRank) {
     }
 
     // top 100%
-    if (TopPercentage(totalPlayers, div) > 0.5) {
+    if (TopPercentage(players, div) > 0.5) {
         if (divRank > 32) return trophy4;
         if (divRank > 8)  return trophy4 * 3;
         if (divRank > 3)  return trophy4 * 7;

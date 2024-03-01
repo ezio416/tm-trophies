@@ -61,105 +61,94 @@ void Tab_KoData() {
     if (!UI::BeginTabItem("KO Data"))
         return;
 
-    CTrackMania@ App = cast<CTrackMania@>(GetApp());
-    // CTrackManiaNetwork@ Network = cast<CTrackManiaNetwork@>(App.Network);
-    // CTrackManiaNetworkServerInfo@ ServerInfo = cast<CTrackManiaNetworkServerInfo@>(Network.ServerInfo);
+    const MLFeed::KoDataProxy@ koData = MLFeed::GetKoData();
+    if (koData !is null) {
+        if (UI::BeginTable("##koData-table", 2, UI::TableFlags::Resizable | UI::TableFlags::ScrollY)) {
+            UI::TableSetupScrollFreeze(0, 1);
+            UI::TableSetupColumn("variable");
+            UI::TableSetupColumn("value");
+            UI::TableHeadersRow();
 
-    if (
-        App.CurrentPlayground !is null
-        // && ServerInfo.CurGameModeStr == "TM_KnockoutDaily_Online"
-    ) {
-        const MLFeed::KoDataProxy@ koData = MLFeed::GetKoData();
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("Division");
+            UI::TableNextColumn(); UI::Text(tostring(koData.Division));
 
-        if (koData !is null) {
-            if (UI::BeginTable("##koData-table", 2, UI::TableFlags::Resizable | UI::TableFlags::ScrollY)) {
-                UI::TableSetupScrollFreeze(0, 1);
-                UI::TableSetupColumn("variable");
-                UI::TableSetupColumn("value");
-                UI::TableHeadersRow();
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("GameMode");
+            UI::TableNextColumn(); UI::Text(koData.GameMode);
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("KOsMilestone");
+            UI::TableNextColumn(); UI::Text(tostring(koData.KOsMilestone));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("KOsNumber");
+            UI::TableNextColumn(); UI::Text(tostring(koData.KOsNumber));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("Map");
+            UI::TableNextColumn(); UI::Text(koData.Map);
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("MapRoundNb");
+            UI::TableNextColumn(); UI::Text(tostring(koData.MapRoundNb));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("MapRoundTotal");
+            UI::TableNextColumn(); UI::Text(tostring(koData.MapRoundTotal));
+
+            // UI::TableNextRow();
+            // UI::TableNextColumn(); UI::Text("Players");
+            // UI::TableNextColumn(); UI::Text(tostring(koData.Players));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("PlayersNb");
+            UI::TableNextColumn(); UI::Text(tostring(koData.PlayersNb));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("RoundNb");
+            UI::TableNextColumn(); UI::Text(tostring(koData.RoundNb));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("RoundTotal");
+            UI::TableNextColumn(); UI::Text(tostring(koData.RoundTotal));
+
+            UI::Separator();
+
+            const MLFeed::KoPlayerState@ playerState = koData.GetPlayerState(myName);
+            if (playerState !is null) {
+                UI::TableNextRow();
+                UI::TableNextColumn(); UI::Text("isAlive");
+                UI::TableNextColumn(); UI::Text(tostring(playerState.isAlive));
 
                 UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("Division");
-                UI::TableNextColumn(); UI::Text(tostring(koData.Division));
+                UI::TableNextColumn(); UI::Text("isDNF");
+                UI::TableNextColumn(); UI::Text(tostring(playerState.isDNF));
 
                 UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("GameMode");
-                UI::TableNextColumn(); UI::Text(koData.GameMode);
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("KOsMilestone");
-                UI::TableNextColumn(); UI::Text(tostring(koData.KOsMilestone));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("KOsNumber");
-                UI::TableNextColumn(); UI::Text(tostring(koData.KOsNumber));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("Map");
-                UI::TableNextColumn(); UI::Text(koData.Map);
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("MapRoundNb");
-                UI::TableNextColumn(); UI::Text(tostring(koData.MapRoundNb));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("MapRoundTotal");
-                UI::TableNextColumn(); UI::Text(tostring(koData.MapRoundTotal));
-
-                // UI::TableNextRow();
-                // UI::TableNextColumn(); UI::Text("Players");
-                // UI::TableNextColumn(); UI::Text(tostring(koData.Players));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("PlayersNb");
-                UI::TableNextColumn(); UI::Text(tostring(koData.PlayersNb));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("RoundNb");
-                UI::TableNextColumn(); UI::Text(tostring(koData.RoundNb));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("RoundTotal");
-                UI::TableNextColumn(); UI::Text(tostring(koData.RoundTotal));
+                UI::TableNextColumn(); UI::Text("name");
+                UI::TableNextColumn(); UI::Text(playerState.name);
 
                 UI::Separator();
 
-                const MLFeed::KoPlayerState@ playerState = koData.GetPlayerState(myName);
-                if (playerState !is null) {
+                MLFeed::PlayerCpInfo@ cpInfo = playerState.MainState;
+                if (cpInfo !is null)
+                    TableCpInfo(cpInfo);
+                else {
                     UI::TableNextRow();
-                    UI::TableNextColumn(); UI::Text("isAlive");
-                    UI::TableNextColumn(); UI::Text(tostring(playerState.isAlive));
-
-                    UI::TableNextRow();
-                    UI::TableNextColumn(); UI::Text("isDNF");
-                    UI::TableNextColumn(); UI::Text(tostring(playerState.isDNF));
-
-                    UI::TableNextRow();
-                    UI::TableNextColumn(); UI::Text("name");
-                    UI::TableNextColumn(); UI::Text(playerState.name);
-
-                    UI::Separator();
-
-                    MLFeed::PlayerCpInfo@ cpInfo = playerState.MainState;
-                    if (cpInfo !is null)
-                        TableCpInfo(cpInfo);
-                    else {
-                        UI::TableNextRow();
-                        UI::TableNextColumn(); UI::Text("PlayerCpInfo");
-                        UI::TableNextColumn(); UI::Text("\\$F00null");
-                    }
-                } else {
-                    UI::TableNextRow();
-                    UI::TableNextColumn(); UI::Text("KoPlayerState");
-                    UI::TableNextColumn(); UI::Text("\\$F70null");
+                    UI::TableNextColumn(); UI::Text("PlayerCpInfo");
+                    UI::TableNextColumn(); UI::Text("\\$F00null");
                 }
-
-                UI::EndTable();
+            } else {
+                UI::TableNextRow();
+                UI::TableNextColumn(); UI::Text("KoPlayerState");
+                UI::TableNextColumn(); UI::Text("\\$F70null");
             }
-        } else
-            UI::Text("\\$F70koData null");
+
+            UI::EndTable();
+        }
     } else
-        UI::Text("\\$F70not in playground or game mode is wrong");
+        UI::Text("\\$F70koData null");
 
     UI::EndTabItem();
 }
@@ -168,127 +157,118 @@ void Tab_RaceData() {
     if (!UI::BeginTabItem("Race Data"))
         return;
 
-    CTrackMania@ App = cast<CTrackMania@>(GetApp());
-    // CTrackManiaNetwork@ Network = cast<CTrackManiaNetwork@>(App.Network);
-    // CTrackManiaNetworkServerInfo@ ServerInfo = cast<CTrackManiaNetworkServerInfo@>(Network.ServerInfo);
+    const MLFeed::HookRaceStatsEventsBase_V4@ raceData = MLFeed::GetRaceData_V4();
+    if (raceData !is null) {
+        if (UI::BeginTable("##raceData-table", 2, UI::TableFlags::Resizable | UI::TableFlags::ScrollY)) {
+            UI::TableSetupScrollFreeze(0, 1);
+            UI::TableSetupColumn("variable");
+            UI::TableSetupColumn("value");
+            UI::TableHeadersRow();
 
-    if (
-        App.CurrentPlayground !is null
-        // && ServerInfo.CurGameModeStr == "TM_KnockoutDaily_Online"
-    ) {
-        const MLFeed::HookRaceStatsEventsBase_V4@ raceData = MLFeed::GetRaceData_V4();
-        if (raceData !is null) {
-            if (UI::BeginTable("##raceData-table", 2, UI::TableFlags::Resizable | UI::TableFlags::ScrollY)) {
-                UI::TableSetupScrollFreeze(0, 1);
-                UI::TableSetupColumn("variable");
-                UI::TableSetupColumn("value");
-                UI::TableHeadersRow();
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("COTDQ_APIRaceTime");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_APIRaceTime));
 
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("COTDQ_IsSynchronizingRecord");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_IsSynchronizingRecord));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("COTDQ_LocalRaceTime");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_LocalRaceTime));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("COTDQ_QualificationsJoinTime");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_QualificationsJoinTime));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("COTDQ_QualificationsProgress");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_QualificationsProgress));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("COTDQ_Rank");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_Rank));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("COTDQ_UpdateNonce");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_UpdateNonce));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("CPCount");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.CPCount));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("CPsToFinish");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.CPsToFinish));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("CpCount");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.CpCount));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("LapCount");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.LapCount));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("LapCount_Accurate");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.LapCount_Accurate));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("LapsNb");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.LapsNb));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("LastRecordTime");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.LastRecordTime));
+
+            // UI::TableNextRow();
+            // UI::TableNextColumn(); UI::Text("Map");
+            // UI::TableNextColumn(); UI::Text(raceData.Map);
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("Rules_EndTime");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.Rules_EndTime));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("Rules_GameTime");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.Rules_GameTime));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("Rules_StartTime");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.Rules_StartTime));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("SpawnCounter");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.SpawnCounter));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("UpdateNonce");
+            UI::TableNextColumn(); UI::Text(tostring(raceData.UpdateNonce));
+
+            UI::TableNextRow();
+            UI::TableNextColumn(); UI::Text("lastMap");
+            UI::TableNextColumn(); UI::Text(raceData.lastMap);
+
+            // UI::TableNextRow();
+            // UI::TableNextColumn(); UI::Text("latestPlayerStats");
+            // UI::TableNextColumn(); UI::Text(tostring(raceData.latestPlayerStats));
+
+            // UI::TableNextRow();
+            // UI::TableNextColumn(); UI::Text("type");
+            // UI::TableNextColumn(); UI::Text(raceData.type);
+
+            UI::Separator();
+
+            const MLFeed::PlayerCpInfo@ cpInfo = raceData.GetPlayer_V2(myName);
+            if (cpInfo !is null)
+                TableCpInfo(cpInfo);
+            else {
                 UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("COTDQ_APIRaceTime");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_APIRaceTime));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("COTDQ_IsSynchronizingRecord");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_IsSynchronizingRecord));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("COTDQ_LocalRaceTime");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_LocalRaceTime));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("COTDQ_QualificationsJoinTime");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_QualificationsJoinTime));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("COTDQ_QualificationsProgress");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_QualificationsProgress));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("COTDQ_Rank");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_Rank));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("COTDQ_UpdateNonce");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.COTDQ_UpdateNonce));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("CPCount");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.CPCount));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("CPsToFinish");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.CPsToFinish));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("CpCount");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.CpCount));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("LapCount");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.LapCount));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("LapCount_Accurate");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.LapCount_Accurate));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("LapsNb");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.LapsNb));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("LastRecordTime");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.LastRecordTime));
-
-                // UI::TableNextRow();
-                // UI::TableNextColumn(); UI::Text("Map");
-                // UI::TableNextColumn(); UI::Text(raceData.Map);
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("Rules_EndTime");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.Rules_EndTime));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("Rules_GameTime");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.Rules_GameTime));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("Rules_StartTime");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.Rules_StartTime));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("SpawnCounter");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.SpawnCounter));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("UpdateNonce");
-                UI::TableNextColumn(); UI::Text(tostring(raceData.UpdateNonce));
-
-                UI::TableNextRow();
-                UI::TableNextColumn(); UI::Text("lastMap");
-                UI::TableNextColumn(); UI::Text(raceData.lastMap);
-
-                // UI::TableNextRow();
-                // UI::TableNextColumn(); UI::Text("latestPlayerStats");
-                // UI::TableNextColumn(); UI::Text(tostring(raceData.latestPlayerStats));
-
-                // UI::TableNextRow();
-                // UI::TableNextColumn(); UI::Text("type");
-                // UI::TableNextColumn(); UI::Text(raceData.type);
-
-                UI::Separator();
-
-                const MLFeed::PlayerCpInfo@ cpInfo = raceData.GetPlayer_V2(myName);
-                if (cpInfo !is null)
-                    TableCpInfo(cpInfo);
-                else {
-                    UI::TableNextRow();
-                    UI::TableNextColumn(); UI::Text("PlayerCpInfo");
-                    UI::TableNextColumn(); UI::Text("\\$F00null");
-                }
-
-                UI::EndTable();
+                UI::TableNextColumn(); UI::Text("PlayerCpInfo");
+                UI::TableNextColumn(); UI::Text("\\$F00null");
             }
+
+            UI::EndTable();
         }
     }
 
