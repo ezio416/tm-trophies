@@ -48,7 +48,7 @@ void Render() {
 }
 
 void RenderQualifier() {
-    if (gameMode != "TM_COTDQualifications_Online")
+    if (!S_Qualifier || gameMode != "TM_COTDQualifications_Online")
         return;
 
     qualiRank = GetQualiRank();
@@ -59,7 +59,7 @@ void RenderQualifier() {
 }
 
 void RenderKnockout() {
-    if (gameMode != "TM_KnockoutDaily_Online")
+    if (!S_Knockout || gameMode != "TM_KnockoutDaily_Online")
         return;
 
     SetKoValues();
@@ -71,6 +71,9 @@ void RenderKnockout() {
 }
 
 void RenderDebug() {
+    if (!S_Debug)
+        return;
+
     UI::Begin(title + " (debug)", S_Debug, UI::WindowFlags::None);
         UI::Text("rerun: " + rerun);
         UI::Text("total players: " + totalPlayers);
