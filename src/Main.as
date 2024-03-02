@@ -67,26 +67,26 @@ void RenderQualifier() {
         UI::Separator();
 
         if (rerun) {
-            UI::Text((qualiRank == 1 ? GREEN : WHITE)                     + "Rank: 1, Trophies: "       + InsertSeparators(CotdRerunQualifierTrophies(1)));
-            UI::Text((qualiRank == 2 ? GREEN : WHITE)                     + "Rank: 2, Trophies: "       + InsertSeparators(CotdRerunQualifierTrophies(2)));
-            UI::Text((qualiRank == 3 ? GREEN : WHITE)                     + "Rank: 3, Trophies: "       + InsertSeparators(CotdRerunQualifierTrophies(3)));
-            UI::Text((qualiRank > 3 && qualiRank < 11 ? GREEN : WHITE)    + "Rank: 4-10, Trophies: "    + InsertSeparators(CotdRerunQualifierTrophies(4)));
-            UI::Text((qualiRank > 10 && qualiRank < 51 ? GREEN : WHITE)   + "Rank: 11-50, Trophies: "   + InsertSeparators(CotdRerunQualifierTrophies(11)));
-            UI::Text((qualiRank > 50 && qualiRank < 101 ? GREEN : WHITE)  + "Rank: 51-100, Trophies: "  + InsertSeparators(CotdRerunQualifierTrophies(51)));
-            UI::Text((qualiRank > 100 && qualiRank < 250 ? GREEN : WHITE) + "Rank: 101-250, Trophies: " + InsertSeparators(CotdRerunQualifierTrophies(101)));
-            UI::Text((qualiRank > 250 ? GREEN : WHITE)                    + "Rank: 251+, Trophies: "    + InsertSeparators(CotdRerunQualifierTrophies(251)));
+            UI::Text((qualiRank == 1 ? GREEN : WHITE)                          + "Rank: 1, Trophies: "       + InsertSeparators(CotdRerunQualifierTrophies(1)));
+            UI::Text((qualiRank == 2 ? GREEN : WHITE)                          + "Rank: 2, Trophies: "       + InsertSeparators(CotdRerunQualifierTrophies(2)));
+            UI::Text((qualiRank == 3 ? GREEN : WHITE)                          + "Rank: 3, Trophies: "       + InsertSeparators(CotdRerunQualifierTrophies(3)));
+            UI::Text((IsBetweenInclusive(qualiRank, 3, 10) ? GREEN : WHITE)    + "Rank: 4-10, Trophies: "    + InsertSeparators(CotdRerunQualifierTrophies(4)));
+            UI::Text((IsBetweenInclusive(qualiRank, 11, 51) ? GREEN : WHITE)   + "Rank: 11-50, Trophies: "   + InsertSeparators(CotdRerunQualifierTrophies(11)));
+            UI::Text((IsBetweenInclusive(qualiRank, 51, 100) ? GREEN : WHITE)  + "Rank: 51-100, Trophies: "  + InsertSeparators(CotdRerunQualifierTrophies(51)));
+            UI::Text((IsBetweenInclusive(qualiRank, 101, 250) ? GREEN : WHITE) + "Rank: 101-250, Trophies: " + InsertSeparators(CotdRerunQualifierTrophies(101)));
+            UI::Text((qualiRank > 250 ? GREEN : WHITE)                         + "Rank: 251+, Trophies: "    + InsertSeparators(CotdRerunQualifierTrophies(251)));
         } else {
-            UI::Text((qualiRank == 1 ? GREEN : WHITE)                       + "Rank: 1, Trophies: "         + InsertSeparators(CotdQualifierTrophies(1)));
-            UI::Text((qualiRank == 2 ? GREEN : WHITE)                       + "Rank: 2, Trophies: "         + InsertSeparators(CotdQualifierTrophies(2)));
-            UI::Text((qualiRank == 3 ? GREEN : WHITE)                       + "Rank: 3, Trophies: "         + InsertSeparators(CotdQualifierTrophies(3)));
-            UI::Text((qualiRank > 3 && qualiRank < 11 ? GREEN : WHITE)      + "Rank: 4-10, Trophies: "      + InsertSeparators(CotdQualifierTrophies(4)));
-            UI::Text((qualiRank > 10 && qualiRank < 51 ? GREEN : WHITE)     + "Rank: 11-50, Trophies: "     + InsertSeparators(CotdQualifierTrophies(11)));
-            UI::Text((qualiRank > 50 && qualiRank < 101 ? GREEN : WHITE)    + "Rank: 51-100, Trophies: "    + InsertSeparators(CotdQualifierTrophies(51)));
-            UI::Text((qualiRank > 100 && qualiRank < 251 ? GREEN : WHITE)   + "Rank: 101-250, Trophies: "   + InsertSeparators(CotdQualifierTrophies(101)));
-            UI::Text((qualiRank > 250 && qualiRank < 501 ? GREEN : WHITE)   + "Rank: 251-500, Trophies: "   + InsertSeparators(CotdQualifierTrophies(251)));
-            UI::Text((qualiRank > 500 && qualiRank < 1001 ? GREEN : WHITE)  + "Rank: 501-1000, Trophies: "  + InsertSeparators(CotdQualifierTrophies(501)));
-            UI::Text((qualiRank > 1000 && qualiRank < 2501 ? GREEN : WHITE) + "Rank: 1001-2500, Trophies: " + InsertSeparators(CotdQualifierTrophies(1001)));
-            UI::Text((qualiRank > 2500 ? GREEN : WHITE)                     + "Rank: 2501+, Trophies: "     + InsertSeparators(CotdQualifierTrophies(2501)));
+            UI::Text((qualiRank == 1                            ? GREEN : WHITE) + "Rank: 1, Trophies: "         + InsertSeparators(CotdQualifierTrophies(1)));
+            UI::Text((qualiRank == 2                            ? GREEN : WHITE) + "Rank: 2, Trophies: "         + InsertSeparators(CotdQualifierTrophies(2)));
+            UI::Text((qualiRank == 3                            ? GREEN : WHITE) + "Rank: 3, Trophies: "         + InsertSeparators(CotdQualifierTrophies(3)));
+            UI::Text((IsBetweenInclusive(qualiRank, 4, 10)      ? GREEN : WHITE) + "Rank: 4-10, Trophies: "      + InsertSeparators(CotdQualifierTrophies(4)));
+            UI::Text((IsBetweenInclusive(qualiRank, 11, 50)     ? GREEN : WHITE) + "Rank: 11-50, Trophies: "     + InsertSeparators(CotdQualifierTrophies(11)));
+            UI::Text((IsBetweenInclusive(qualiRank, 51, 100)    ? GREEN : WHITE) + "Rank: 51-100, Trophies: "    + InsertSeparators(CotdQualifierTrophies(51)));
+            UI::Text((IsBetweenInclusive(qualiRank, 101, 250)   ? GREEN : WHITE) + "Rank: 101-250, Trophies: "   + InsertSeparators(CotdQualifierTrophies(101)));
+            UI::Text((IsBetweenInclusive(qualiRank, 251, 500)   ? GREEN : WHITE) + "Rank: 251-500, Trophies: "   + InsertSeparators(CotdQualifierTrophies(251)));
+            UI::Text((IsBetweenInclusive(qualiRank, 501, 1000)  ? GREEN : WHITE) + "Rank: 501-1000, Trophies: "  + InsertSeparators(CotdQualifierTrophies(501)));
+            UI::Text((IsBetweenInclusive(qualiRank, 1001, 2500) ? GREEN : WHITE) + "Rank: 1001-2500, Trophies: " + InsertSeparators(CotdQualifierTrophies(1001)));
+            UI::Text((qualiRank > 2500                          ? GREEN : WHITE) + "Rank: 2501+, Trophies: "     + InsertSeparators(CotdQualifierTrophies(2501)));
         }
 
     UI::End();

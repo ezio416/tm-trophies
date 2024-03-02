@@ -32,3 +32,7 @@ string InsertSeparators(int num) {
 
     return result;
 }
+
+bool IsBetweenInclusive(int num, int min, int max) {
+    return min <= num && num <= max;
+}
