@@ -2,7 +2,7 @@
 // m 2024-03-01
 
 const string audienceLive = "NadeoLiveServices";
-string       lastCotd;
+// string       lastCotd;
 uint64       lastRequest  = 0;
 bool         rerun        = false;
 uint         totalPlayers = 0;
@@ -18,13 +18,13 @@ void SetCotdInfo() {
 
     print("SetCotdInfo");
 
-    while (!NadeoServices::IsAuthenticated(audienceLive))
-        yield();
+    // while (!NadeoServices::IsAuthenticated(audienceLive))
+    //     yield();
 
-    Net::HttpRequest@ req = NadeoServices::Get(audienceLive, NadeoServices::BaseURLMeet() + "api/cup-of-the-day/current");
-    req.Start();
+    // Net::HttpRequest@ req = NadeoServices::Get(audienceLive, NadeoServices::BaseURLMeet() + "/api/cup-of-the-day/current");
+    // req.Start();
 
-    // Net::HttpRequest@ req = Net::HttpGet("https://map-monitor.xk.io/cached/api/cup-of-the-day/current");
+    Net::HttpRequest@ req = Net::HttpGet("https://map-monitor.xk.io/cached/api/cup-of-the-day/current");
 
     while (!req.Finished())
         yield();
@@ -48,13 +48,11 @@ void SetCotdInfo() {
     }
 
     string name = string(info["competition"]["name"]);
-    if (name == lastCotd)
-        return;
+    // if (name == lastCotd)
+    //     return;
 
     rerun = !name.EndsWith("#1");
-    lastCotd = name;
+    // lastCotd = name;
 
     totalPlayers = uint(info["competition"]["nbPlayers"]);
-
-    gotCotdInfo = true;
 }

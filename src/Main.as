@@ -2,12 +2,13 @@
 // m 2024-03-01
 
 string       gameMode;
-bool         gotCotdInfo = false;
 string       myName;
 const string title       = "\\$FFF" + Icons::Trophy + "\\$G Trophy Estimator";
 
 void Main() {
-    NadeoServices::AddAudience(audienceLive);
+    // SetCotdInfo();
+
+    // NadeoServices::AddAudience(audienceLive);
 
     CTrackMania@ App = cast<CTrackMania@>(GetApp());
     CTrackManiaNetwork@ Network = cast<CTrackManiaNetwork@>(App.Network);
@@ -18,11 +19,8 @@ void Main() {
     while (true) {
         gameMode = ServerInfo.CurGameModeStr;
 
-        if (gameMode == "TM_KnockoutDaily_Online") {
-            if (!gotCotdInfo)
-                SetCotdInfo();
-        } else
-            gotCotdInfo = false;
+        if (gameMode == "TM_COTDQualifications_Online" || gameMode == "TM_KnockoutDaily_Online")
+            SetCotdInfo();
 
         yield();
     }
@@ -104,6 +102,7 @@ void RenderKnockout() {
         UI::Text("Division: " + division);
         UI::Text("Rank: " + divisionRank);
         UI::Text("Players left: " + playersLeft);
+        UI::Text("alive: " + alive);
 
         UI::Separator();
 
