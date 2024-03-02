@@ -1,9 +1,9 @@
 // c 2024-02-16
-// m 2024-03-01
+// m 2024-03-02
 
 string       gameMode;
 string       myName;
-const string title       = "\\$FFF" + Icons::Trophy + "\\$G Trophy Estimator";
+const string title       = "\\$FFF" + Icons::Trophy + "\\$G Trophies";
 
 void Main() {
     // SetCotdInfo();

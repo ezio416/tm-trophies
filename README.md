@@ -1,6 +1,6 @@
 ![Signed](https://img.shields.io/badge/Signed-No-FF3333)
 ![Game Trackmania](https://img.shields.io/badge/Game-Trackmania-blue)
-# Trophy Estimator
+# Trophies
 
 Tells you how many trophy points you should expect to get based on placement in a live match. Currently only works for the qualifier and knockout for each Cup of the Day, but could work for other gamemodes (i.e. Time Attack) once those are better understood.
 
