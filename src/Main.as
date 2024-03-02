@@ -108,19 +108,19 @@ void RenderKnockout() {
         UI::Separator();
 
         if (rerun) {
-            UI::Text(                                    "Rank: 1: "    + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 1)));
-            UI::Text(                                    "Rank: 2: "    + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 2)));
-            UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank: 3: "    + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 3)));
-            UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank: 4-8: "  + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 4)));
-            UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank: 9-32: " + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 9)));
-            UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank: 33+: "  + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 33)));
+            UI::Text(                                    "Rank: 1: "    + InsertSeparators(CotdRerunKnockoutTrophies(1)));
+            UI::Text(                                    "Rank: 2: "    + InsertSeparators(CotdRerunKnockoutTrophies(2)));
+            UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank: 3: "    + InsertSeparators(CotdRerunKnockoutTrophies(3)));
+            UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank: 4-8: "  + InsertSeparators(CotdRerunKnockoutTrophies(4)));
+            UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank: 9-32: " + InsertSeparators(CotdRerunKnockoutTrophies(9)));
+            UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank: 33+: "  + InsertSeparators(CotdRerunKnockoutTrophies(33)));
         } else {
-            UI::Text(                                    "Rank: 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1)));
-            UI::Text(                                    "Rank: 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2)));
-            UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank: 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3)));
-            UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank: 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4)));
-            UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank: 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9)));
-            UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank: 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33)));
+            UI::Text(                                    "Rank: 1: "    + InsertSeparators(CotdKnockoutTrophies(1)));
+            UI::Text(                                    "Rank: 2: "    + InsertSeparators(CotdKnockoutTrophies(2)));
+            UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank: 3: "    + InsertSeparators(CotdKnockoutTrophies(3)));
+            UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank: 4-8: "  + InsertSeparators(CotdKnockoutTrophies(4)));
+            UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank: 9-32: " + InsertSeparators(CotdKnockoutTrophies(9)));
+            UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank: 33+: "  + InsertSeparators(CotdKnockoutTrophies(33)));
         }
 
     UI::End();
