@@ -1,15 +1,23 @@
 // c 2024-02-29
-// m 2024-03-01
+// m 2024-03-02
 
 const string audienceLive = "NadeoLiveServices";
 // string       lastCotd;
 uint64       lastRequest  = 0;
+// uint64       nextRequest  = 0;
 bool         rerun        = false;
 uint         totalPlayers = 0;
 const uint64 waitTime     = 15000;
 
 void SetCotdInfo() {
     uint64 now = Time::Now;
+
+    // if (now < nextRequest) {
+    //     return;
+    // } else if (lastRequest == 0 || nextRequest == 0) {
+    //     lastRequest = now;
+    //     nextRequest = now + waitTime + Math::Rand(0, 5000);
+    // }
 
     if (now - lastRequest < waitTime)
         return;
@@ -46,6 +54,8 @@ void SetCotdInfo() {
         warn("bad API response: " + text);
         return;
     }
+
+    // print(text);
 
     string name = string(info["competition"]["name"]);
     // if (name == lastCotd)
