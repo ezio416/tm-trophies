@@ -96,7 +96,7 @@ void RenderKnockout() {
     if (!S_Knockout || gameMode != "TM_KnockoutDaily_Online")
         return;
 
-    SetKoValues();
+    SetKoInfo();
 
     UI::Begin(title + " (knockout)", S_Knockout, UI::WindowFlags::None);
         UI::Text("Rerun: " + rerun);

@@ -16,7 +16,7 @@ uint GetQualiRank() {
     return raceData.COTDQ_Rank;
 }
 
-void SetKoValues() {
+void SetKoInfo() {
     const MLFeed::KoDataProxy@ koData = MLFeed::GetKoData();
     if (koData is null) {
         division = 0;
