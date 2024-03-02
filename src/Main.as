@@ -1,12 +1,13 @@
 // c 2024-02-16
-// m 2024-02-29
+// m 2024-03-01
 
 string       gameMode;
+bool         gotCotdInfo = false;
 string       myName;
-const string title = "\\$FFF" + Icons::Trophy + "\\$G Trophy Estimator";
+const string title       = "\\$FFF" + Icons::Trophy + "\\$G Trophy Estimator";
 
 void Main() {
-    SetCotdInfo();
+    NadeoServices::AddAudience(audienceLive);
 
     CTrackMania@ App = cast<CTrackMania@>(GetApp());
     CTrackManiaNetwork@ Network = cast<CTrackManiaNetwork@>(App.Network);
@@ -16,6 +17,13 @@ void Main() {
 
     while (true) {
         gameMode = ServerInfo.CurGameModeStr;
+
+        if (gameMode == "TM_KnockoutDaily_Online") {
+            if (!gotCotdInfo)
+                SetCotdInfo();
+        } else
+            gotCotdInfo = false;
+
         yield();
     }
 }
@@ -53,8 +61,34 @@ void RenderQualifier() {
 
     qualiRank = GetQualiRank();
 
-    UI::Begin(title + " (quali)", S_Qualifier);
-        ;
+    UI::Begin(title + " (quali)", S_Qualifier, UI::WindowFlags::None);
+        UI::Text("rank: " + qualiRank);
+
+        UI::Separator();
+
+        if (rerun) {
+            UI::Text((qualiRank == 1 ? GREEN : WHITE)                     + "Rank: 1, Trophies: "       + InsertSeparators(CotdRerunQualifierTrophies(1)));
+            UI::Text((qualiRank == 2 ? GREEN : WHITE)                     + "Rank: 2, Trophies: "       + InsertSeparators(CotdRerunQualifierTrophies(2)));
+            UI::Text((qualiRank == 3 ? GREEN : WHITE)                     + "Rank: 3, Trophies: "       + InsertSeparators(CotdRerunQualifierTrophies(3)));
+            UI::Text((qualiRank > 3 && qualiRank < 11 ? GREEN : WHITE)    + "Rank: 4-10, Trophies: "    + InsertSeparators(CotdRerunQualifierTrophies(4)));
+            UI::Text((qualiRank > 10 && qualiRank < 51 ? GREEN : WHITE)   + "Rank: 11-50, Trophies: "   + InsertSeparators(CotdRerunQualifierTrophies(11)));
+            UI::Text((qualiRank > 50 && qualiRank < 101 ? GREEN : WHITE)  + "Rank: 51-100, Trophies: "  + InsertSeparators(CotdRerunQualifierTrophies(51)));
+            UI::Text((qualiRank > 100 && qualiRank < 250 ? GREEN : WHITE) + "Rank: 101-250, Trophies: " + InsertSeparators(CotdRerunQualifierTrophies(101)));
+            UI::Text((qualiRank > 250 ? GREEN : WHITE)                    + "Rank: 251+, Trophies: "    + InsertSeparators(CotdRerunQualifierTrophies(251)));
+        } else {
+            UI::Text((qualiRank == 1 ? GREEN : WHITE)                       + "Rank: 1, Trophies: "         + InsertSeparators(CotdQualifierTrophies(1)));
+            UI::Text((qualiRank == 2 ? GREEN : WHITE)                       + "Rank: 2, Trophies: "         + InsertSeparators(CotdQualifierTrophies(2)));
+            UI::Text((qualiRank == 3 ? GREEN : WHITE)                       + "Rank: 3, Trophies: "         + InsertSeparators(CotdQualifierTrophies(3)));
+            UI::Text((qualiRank > 3 && qualiRank < 11 ? GREEN : WHITE)      + "Rank: 4-10, Trophies: "      + InsertSeparators(CotdQualifierTrophies(4)));
+            UI::Text((qualiRank > 10 && qualiRank < 51 ? GREEN : WHITE)     + "Rank: 11-50, Trophies: "     + InsertSeparators(CotdQualifierTrophies(11)));
+            UI::Text((qualiRank > 50 && qualiRank < 101 ? GREEN : WHITE)    + "Rank: 51-100, Trophies: "    + InsertSeparators(CotdQualifierTrophies(51)));
+            UI::Text((qualiRank > 100 && qualiRank < 251 ? GREEN : WHITE)   + "Rank: 101-250, Trophies: "   + InsertSeparators(CotdQualifierTrophies(101)));
+            UI::Text((qualiRank > 250 && qualiRank < 501 ? GREEN : WHITE)   + "Rank: 251-500, Trophies: "   + InsertSeparators(CotdQualifierTrophies(251)));
+            UI::Text((qualiRank > 500 && qualiRank < 1001 ? GREEN : WHITE)  + "Rank: 501-1000, Trophies: "  + InsertSeparators(CotdQualifierTrophies(501)));
+            UI::Text((qualiRank > 1000 && qualiRank < 2501 ? GREEN : WHITE) + "Rank: 1001-2500, Trophies: " + InsertSeparators(CotdQualifierTrophies(1001)));
+            UI::Text((qualiRank > 2500 ? GREEN : WHITE)                     + "Rank: 2501+, Trophies: "     + InsertSeparators(CotdQualifierTrophies(2501)));
+        }
+
     UI::End();
 }
 
@@ -63,10 +97,32 @@ void RenderKnockout() {
         return;
 
     SetKoValues();
-    SetCotdInfo();
 
-    UI::Begin(title + " (knockout)", S_Knockout);
-        ;
+    UI::Begin(title + " (knockout)", S_Knockout, UI::WindowFlags::None);
+        UI::Text("Rerun: " + rerun);
+        UI::Text("Total players: " + totalPlayers);
+        UI::Text("Division: " + division);
+        UI::Text("Rank: " + divisionRank);
+        UI::Text("Players left: " + playersLeft);
+
+        UI::Separator();
+
+        if (rerun) {
+            UI::Text(                                    "Rank: 1, Trophies: "    + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 1)));
+            UI::Text(                                    "Rank: 2, Trophies: "    + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 2)));
+            UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank: 3, Trophies: "    + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 3)));
+            UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank: 4-8, Trophies: "  + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 4)));
+            UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank: 9-32, Trophies: " + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 9)));
+            UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank: 33+, Trophies: "  + InsertSeparators(CotdRerunKnockoutTrophies(totalPlayers, division, 33)));
+        } else {
+            UI::Text(                                    "Rank: 1, Trophies: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1)));
+            UI::Text(                                    "Rank: 2, Trophies: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2)));
+            UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank: 3, Trophies: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3)));
+            UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank: 4-8, Trophies: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4)));
+            UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank: 9-32, Trophies: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9)));
+            UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank: 33+, Trophies: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33)));
+        }
+
     UI::End();
 }
 
@@ -83,6 +139,7 @@ void RenderDebug() {
         UI::Text("div: " + division);
         UI::Text("div rank: " + divisionRank);
         UI::Text("players left: " + playersLeft);
+        UI::Text("alive: " + alive);
 
         UI::BeginTabBar("##tabs");
             Tab_CotdQuali();

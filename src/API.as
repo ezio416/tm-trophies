@@ -1,6 +1,8 @@
 // c 2024-02-29
-// m 2024-02-29
+// m 2024-03-01
 
+const string audienceLive = "NadeoLiveServices";
+string       lastCotd;
 uint64       lastRequest  = 0;
 bool         rerun        = false;
 uint         totalPlayers = 0;
@@ -16,7 +18,14 @@ void SetCotdInfo() {
 
     print("SetCotdInfo");
 
-    Net::HttpRequest@ req = Net::HttpGet("https://map-monitor.xk.io/cached/api/cup-of-the-day/current");
+    while (!NadeoServices::IsAuthenticated(audienceLive))
+        yield();
+
+    Net::HttpRequest@ req = NadeoServices::Get(audienceLive, NadeoServices::BaseURLMeet() + "api/cup-of-the-day/current");
+    req.Start();
+
+    // Net::HttpRequest@ req = Net::HttpGet("https://map-monitor.xk.io/cached/api/cup-of-the-day/current");
+
     while (!req.Finished())
         yield();
 
@@ -24,7 +33,7 @@ void SetCotdInfo() {
     string text = req.String();
 
     if (code != 200) {
-        warn("bad response (" + code + ") from map monitor: " + text);
+        warn("bad API response (" + code + "): " + text);
         return;
     }
 
@@ -34,12 +43,18 @@ void SetCotdInfo() {
         @info = Json::Parse(text);
     } catch {
         error(getExceptionInfo());
-        warn("bad response from map monitor: " + text);
+        warn("bad API response: " + text);
         return;
     }
 
     string name = string(info["competition"]["name"]);
+    if (name == lastCotd)
+        return;
+
     rerun = !name.EndsWith("#1");
+    lastCotd = name;
 
     totalPlayers = uint(info["competition"]["nbPlayers"]);
+
+    gotCotdInfo = true;
 }

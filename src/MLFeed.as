@@ -1,6 +1,7 @@
 // c 2024-02-29
-// m 2024-02-29
+// m 2024-03-01
 
+bool alive        = false;
 uint division     = 0;
 uint divisionRank = 0;
 uint playersLeft  = 0;
@@ -33,12 +34,17 @@ void SetKoValues() {
         return;
     }
 
-    if (player.isAlive) {
+    alive = player.isAlive;
+
+    if (alive) {
         divisionRank = player.MainState.raceRank;
         wasAlive = true;
     } else {
-        if (wasAlive)
-            print("got rank " + divisionRank + " of div " + division);
+        if (wasAlive) {
+            string msg = "got rank " + divisionRank + " of div " + division;
+            print(msg);
+            UI::ShowNotification(title, msg);
+        }
 
         wasAlive = false;
     }
