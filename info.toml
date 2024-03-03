@@ -6,4 +6,4 @@ version = "0.1.0"
 siteid = 511
 
 [script]
-dependencies = [ "NadeoServices", "MLHook", "MLFeedRaceData" ]
+dependencies = [ "MLHook", "MLFeedRaceData" ]

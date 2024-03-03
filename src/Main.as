@@ -1,15 +1,11 @@
 // c 2024-02-16
-// m 2024-03-02
+// m 2024-03-03
 
 string       gameMode;
 string       myName;
 const string title       = "\\$FFF" + Icons::Trophy + "\\$G Trophies";
 
 void Main() {
-    // SetCotdInfo();
-
-    // NadeoServices::AddAudience(audienceLive);
-
     CTrackMania@ App = cast<CTrackMania@>(GetApp());
     CTrackManiaNetwork@ Network = cast<CTrackManiaNetwork@>(App.Network);
     CTrackManiaNetworkServerInfo@ ServerInfo = cast<CTrackManiaNetworkServerInfo@>(Network.ServerInfo);
@@ -60,6 +56,7 @@ void RenderQualifier() {
     qualiRank = GetQualiRank();
 
     UI::Begin(title + " (quali)", S_Qualifier, UI::WindowFlags::None);
+        UI::Text("total players: " + totalPlayers);
         UI::Text("rank: " + qualiRank);
 
         UI::Separator();
@@ -97,11 +94,11 @@ void RenderKnockout() {
     SetKoInfo();
 
     UI::Begin(title + " (knockout)", S_Knockout, UI::WindowFlags::None);
-        UI::Text("Rerun: " + rerun);
-        UI::Text("Total players: " + totalPlayers);
-        UI::Text("Division: " + division);
-        UI::Text("Rank: " + divisionRank);
-        UI::Text("Players left: " + playersLeft);
+        UI::Text("rerun: " + rerun);
+        UI::Text("total players: " + totalPlayers);
+        UI::Text("division: " + division);
+        UI::Text("rank: " + divisionRank);
+        UI::Text("players left: " + playersLeft);
         UI::Text("alive: " + alive);
 
         UI::Separator();
@@ -130,6 +127,9 @@ void RenderDebug() {
         return;
 
     UI::Begin(title + " (debug)", S_Debug, UI::WindowFlags::None);
+        UI::Text("name: " + name);
+        UI::Text("challenge ID: " + challengeId);
+        UI::Text("edition: " + edition);
         UI::Text("rerun: " + rerun);
         UI::Text("total players: " + totalPlayers);
         UI::Separator();
