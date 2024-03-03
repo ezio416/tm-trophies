@@ -3,7 +3,7 @@
 
 string       gameMode;
 string       myName;
-const string title       = "\\$FFF" + Icons::Trophy + "\\$G Trophies";
+const string title = "\\$FFF" + Icons::Trophy + "\\$G Trophies";
 
 void Main() {
     CTrackMania@ App = cast<CTrackMania@>(GetApp());
