@@ -41,7 +41,10 @@ void RenderMenu() {
 }
 
 void Render() {
-    if (!S_Enabled)
+    if (!S_Enabled
+        || (S_HideWithGame && !UI::IsGameUIVisible())
+        || (S_HideWithOP && !UI::IsOverlayShown())
+    )
         return;
 
     RenderQualifier();
