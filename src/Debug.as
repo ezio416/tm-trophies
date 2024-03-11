@@ -1,5 +1,34 @@
 // c 2024-02-26
-// m 2024-02-29
+// m 2024-03-11
+
+void RenderDebug() {
+    if (!S_Debug)
+        return;
+
+    UI::Begin(title + " (debug)", S_Debug, UI::WindowFlags::AlwaysAutoResize);
+        UI::Text("name: " + name);
+        UI::Text("challenge ID: " + challengeId);
+        UI::Text("edition: " + edition);
+        UI::Text("rerun: " + rerun);
+        UI::Text("total players: " + totalPlayers);
+        UI::Separator();
+        UI::Text("quali rank: " + qualiRank);
+        UI::Separator();
+        UI::Text("div: " + division);
+        UI::Text("div rank: " + divisionRank);
+        UI::Text("players left: " + playersLeft);
+        UI::Text("alive: " + alive);
+
+        UI::BeginTabBar("##tabs");
+            Tab_CotdQuali();
+            Tab_CotdKnockout();
+            Tab_CotdRerunQuali();
+            Tab_CotdRerunKnockout();
+            Tab_KoData();
+            Tab_RaceData();
+        UI::EndTabBar();
+    UI::End();
+}
 
 int cotdQualiRank = 0;
 void Tab_CotdQuali() {
