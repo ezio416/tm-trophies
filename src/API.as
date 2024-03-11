@@ -1,14 +1,13 @@
 // c 2024-02-29
-// m 2024-03-05
+// m 2024-03-11
 
-uint         challengeId         = 0;
-uint         edition             = 0;
+int          challengeId         = 0;
+int          edition             = 0;
 const string mapMonitorUrl       = "https://map-monitor.xk.io/cached";
 string       name;
 uint64       nextRequest         = 0;
-bool         rerun               = false;
-uint         totalPlayers        = 0;
-const uint   totalPlayersDefault = 3000;
+int          totalPlayers        = 0;
+const int    totalPlayersDefault = 3000;
 const uint64 waitTime            = 15000;
 
 void SetCotdInfo() {
@@ -48,12 +47,10 @@ void SetCotdInfo() {
     }
 
     if (info.HasKey("edition")) {
-        edition = uint(info["edition"]);
-        rerun = edition > 1;
+        edition = int(info["edition"]);
     } else {
         warn("response missing key 'edition'");
         edition = 0;
-        rerun = false;
         return;
     }
 
@@ -65,47 +62,50 @@ void SetCotdInfo() {
         else {
             warn("competition missing key 'name'");
             name = "";
-            totalPlayers = totalPlayersDefault;
+            totalPlayers = 0;
             return;
         }
 
         if (competition.HasKey("nbPlayers"))
-            totalPlayers = uint(competition["nbPlayers"]);
+            totalPlayers = int(competition["nbPlayers"]);
         else {
             warn("competition missing key 'nbPlayers'");
-            totalPlayers = totalPlayersDefault;
+            totalPlayers = 0;
             return;
         }
     } else {
         warn("response missing key 'competition'");
         name = "";
-        totalPlayers = totalPlayersDefault;
+        totalPlayers = 0;
         return;
     }
 
+    if (info.HasKey("challenge")) {
+        Json::Value@ challenge = info["challenge"];
+
+        if (challenge.HasKey("id"))
+            challengeId = int(challenge["id"]);
+        else {
+            warn("challenge missing key 'id'");
+            challengeId = 0;
+        }
+    } else {
+        warn("response missing key 'challenge'");
+        challengeId = 0;
+    }
+
     if (totalPlayers == 0) {
+        totalPlayers = totalPlayersDefault;
+
         print("getting total players another way");
 
-        if (info.HasKey("challenge")) {
-            Json::Value@ challenge = info["challenge"];
-
-            if (challenge.HasKey("id"))
-                challengeId = uint(challenge["id"]);
-            else {
-                warn("challenge missing key 'id'");
-                challengeId = 0;
-                return;
-            }
-        } else {
-            warn("response missing key 'challenge'");
-            challengeId = 0;
+        CTrackMania@ App = cast<CTrackMania@>(GetApp());
+        if (App.RootMap is null) {
+            warn("not in a map");
             return;
         }
 
-        CTrackMania@ App = cast<CTrackMania@>(GetApp());
-        CTrackManiaNetwork@ Network = cast<CTrackManiaNetwork@>(App.Network);
-
-        @req = Net::HttpGet(mapMonitorUrl + "/api/challenges/" + challengeId + "/records/maps/" + App.RootMap.EdChallengeId + "/players?players[]=" + Network.PlayerInfo.WebServicesUserId);
+        @req = Net::HttpGet(mapMonitorUrl + "/api/challenges/" + challengeId + "/records/maps/" + App.RootMap.EdChallengeId + "/players?players[]=" + myUserId);
         while (!req.Finished())
             yield();
 
@@ -129,11 +129,8 @@ void SetCotdInfo() {
         }
 
         if (info.HasKey("cardinal"))
-            totalPlayers = uint(info["cardinal"]);
-        else {
+            totalPlayers = int(info["cardinal"]);
+        else
             warn("response missing key 'cardinal'");
-            totalPlayers = totalPlayersDefault;
-            return;
-        }
     }
 }

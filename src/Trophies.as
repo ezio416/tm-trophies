@@ -1,5 +1,5 @@
 // c 2024-02-16
-// m 2024-02-29
+// m 2024-03-11
 
 const int trophy1 = 1;
 const int trophy2 = 10;
@@ -18,9 +18,20 @@ float TopPercentage(int players, int div) {
     return float(div) / Math::Ceil(float(players) / 64.0f);
 }
 
-int CotdQualifierTrophies(int rank) {
+int CotdQualifierTrophies(int rank, bool rerun = false) {
     if (rank < 1)
         return 0;
+
+    if (rerun) {
+        if (rank > 250) return trophy4 * 2;
+        if (rank > 100) return trophy4 * 4;
+        if (rank > 50)  return trophy4 * 5;
+        if (rank > 10)  return trophy4 * 8;
+        if (rank > 3)   return trophy5;
+        if (rank > 2)   return trophy5 * 2;
+        if (rank > 1)   return trophy5 * 4;
+        return trophy5 * 5;
+    }
 
     if (rank > 2500) return trophy3;
     if (rank > 1000) return trophy4;
@@ -35,9 +46,38 @@ int CotdQualifierTrophies(int rank) {
     return trophy6;
 }
 
-int CotdKnockoutTrophies(int players, int div, int divRank) {
+int CotdKnockoutTrophies(int players, int div, int divRank, bool rerun = false) {
     if (players < 1 || div < 1 || divRank < 1)
         return 0;
+
+    if (rerun) {
+        if (div == 1) {
+            if (divRank > 32) return trophy5 * 5;
+            if (divRank > 8)  return trophy5 * 6;
+            if (divRank > 3)  return trophy6;
+            if (divRank > 2)  return trophy6 * 2;
+            if (divRank > 1)  return trophy6 * 4;
+            return trophy6 * 5;
+        }
+
+        // top 100%
+        if (TopPercentage(players, div) > 0.5f) {
+            if (divRank > 32) return trophy4;
+            if (divRank > 8)  return trophy4 * 3;
+            if (divRank > 3)  return trophy4 * 7;
+            if (divRank > 2)  return trophy4 * 9;
+            if (divRank > 1)  return trophy5;
+            return trophy5 * 2;
+        }
+
+        // top 50%
+        if (divRank > 32) return trophy4;
+        if (divRank > 8)  return trophy4 * 4;
+        if (divRank > 3)  return trophy4 * 8;
+        if (divRank > 2)  return trophy5;
+        if (divRank > 1)  return trophy5 * 2;
+        return trophy5 * 3;
+    }
 
     if (div == 1) {
         if (divRank > 32) return trophy6;
@@ -48,7 +88,7 @@ int CotdKnockoutTrophies(int players, int div, int divRank) {
         return trophy7;
     }
 
-    float percent = TopPercentage(players, div);
+    const float percent = TopPercentage(players, div);
 
     // top 100%
     if (percent > 0.5) {
@@ -87,50 +127,4 @@ int CotdKnockoutTrophies(int players, int div, int divRank) {
     if (divRank > 2)  return trophy6 * 4;
     if (divRank > 1)  return trophy6 * 5;
     return trophy6 * 6;
-}
-
-int CotdRerunQualifierTrophies(int rank) {
-    if (rank < 1)
-        return 0;
-
-    if (rank > 250) return trophy4 * 2;
-    if (rank > 100) return trophy4 * 4;
-    if (rank > 50)  return trophy4 * 5;
-    if (rank > 10)  return trophy4 * 8;
-    if (rank > 3)   return trophy5;
-    if (rank > 2)   return trophy5 * 2;
-    if (rank > 1)   return trophy5 * 4;
-    return trophy5 * 5;
-}
-
-int CotdRerunKnockoutTrophies(int players, int div, int divRank) {
-    if (players < 1 || div < 1 || divRank < 1)
-        return 0;
-
-    if (div == 1) {
-        if (divRank > 32) return trophy5 * 5;
-        if (divRank > 8)  return trophy5 * 6;
-        if (divRank > 3)  return trophy6;
-        if (divRank > 2)  return trophy6 * 2;
-        if (divRank > 1)  return trophy6 * 4;
-        return trophy6 * 5;
-    }
-
-    // top 100%
-    if (TopPercentage(players, div) > 0.5) {
-        if (divRank > 32) return trophy4;
-        if (divRank > 8)  return trophy4 * 3;
-        if (divRank > 3)  return trophy4 * 7;
-        if (divRank > 2)  return trophy4 * 9;
-        if (divRank > 1)  return trophy5;
-        return trophy5 * 2;
-    }
-
-    // top 50%
-    if (divRank > 32) return trophy4;
-    if (divRank > 8)  return trophy4 * 4;
-    if (divRank > 3)  return trophy4 * 8;
-    if (divRank > 2)  return trophy5;
-    if (divRank > 1)  return trophy5 * 2;
-    return trophy5 * 3;
 }

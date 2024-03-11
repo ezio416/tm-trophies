@@ -1,14 +1,14 @@
 // c 2024-02-29
-// m 2024-03-01
+// m 2024-03-11
 
 bool alive        = false;
-uint division     = 0;
-uint divisionRank = 0;
-uint playersLeft  = 0;
-uint qualiRank    = 0;
+int  division     = 0;
+int  divisionRank = 0;
+int  playersLeft  = 0;
+int  qualiRank    = 0;
 bool wasAlive     = false;
 
-uint GetQualiRank() {
+int GetQualiRank() {
     const MLFeed::HookRaceStatsEventsBase_V4@ raceData = MLFeed::GetRaceData_V4();
     if (raceData is null)
         return 0;
@@ -24,8 +24,8 @@ void SetKoInfo() {
         playersLeft = 0;
     }
 
-    division = koData.Division;
-    playersLeft = koData.PlayersNb;
+    division = Math::Max(0, koData.Division);
+    playersLeft = Math::Max(0, koData.PlayersNb);
 
     const MLFeed::KoPlayerState@ player = koData.GetPlayerState(myName);
     if (player is null || player.MainState is null) {
