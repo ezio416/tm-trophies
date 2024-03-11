@@ -85,8 +85,8 @@ void RenderDebug() {
         UI::BeginTabBar("##tabs");
             Tab_CotdQuali();
             Tab_CotdKnockout();
-            Tab_KoData();
             Tab_RaceData();
+            Tab_KoData();
         UI::EndTabBar();
     UI::End();
 }
