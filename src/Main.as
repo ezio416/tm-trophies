@@ -14,6 +14,8 @@ void Main() {
     myName = App.LocalPlayerInfo.Name;
     myUserId = App.LocalPlayerInfo.WebServicesUserId;
 
+    ChangeFont();
+
     while (true) {
         gameMode = ServerInfo.CurGameModeStr;
 
@@ -22,6 +24,11 @@ void Main() {
 
         yield();
     }
+}
+
+void OnSettingsChanged() {
+    if (currentFont != S_Font)
+        ChangeFont();
 }
 
 void RenderMenu() {
@@ -50,7 +57,86 @@ void Render() {
     )
         return;
 
-    if (S_Qualifier && gameMode == "TM_COTDQualifications_Online") {
+    const float posX = Draw::GetWidth() * S_X;
+    const float posY = Draw::GetHeight() * S_Y;
+
+    nvg::TextAlign(nvg::Align::Center | nvg::Align::Top);
+    nvg::FontFace(font);
+
+    float maxTextWidth = 0.0f;
+
+    nvg::FontSize(S_HeaderFontSize);
+    // const string header = "COTD " + (gameMode == "TM_COTDQualifications_Online" ? "Qualifier" : "Knockout");
+    const string header = "COTD Qualifier";
+    const vec2 headerSize = nvg::TextBounds(header);
+
+    if (S_Header)
+        maxTextWidth = headerSize.x;
+
+    nvg::FontSize(S_FontSize);
+    const string subheaderRank = "Rank " + qualiRank + " / " + 2717;
+    const vec2 subheaderRankSize = nvg::TextBounds(subheaderRank);
+    const float subheaderRankOffsetY = headerSize.y + S_HeaderFontSize * 0.2f;
+
+    if (S_Subheader)
+        maxTextWidth = Math::Max(maxTextWidth, subheaderRankSize.x);
+
+    const string subheaderDiv = "Division " + 14;
+    const vec2 subheaderDivSize = nvg::TextBounds(subheaderDiv);
+    const float subheaderDivOffsetY = subheaderRankOffsetY + subheaderRankSize.y;
+
+    if (S_Subheader)
+        maxTextWidth = Math::Max(maxTextWidth, subheaderDivSize.x);
+
+    const vec2 fullTextBounds = vec2(
+        maxTextWidth,
+        S_Subheader ? subheaderRankSize.y + subheaderRankOffsetY + subheaderDivSize.y : headerSize.y
+    );
+
+    if (S_Background) {
+        nvg::FillColor(S_BackgroundColor);
+        nvg::BeginPath();
+        nvg::RoundedRect(
+            posX,
+            posY,
+            fullTextBounds.x + S_BackgroundXPad * 2.0f,
+            fullTextBounds.y + S_BackgroundYPad * 2.0f,
+            S_BackgroundRadius
+        );
+        nvg::Fill();
+    }
+
+    if (S_Header) {
+        nvg::FontSize(S_HeaderFontSize);
+        nvg::FillColor(S_FontColor);
+        nvg::Text(
+            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posY + S_BackgroundYPad,
+            header
+        );
+    }
+
+    if (S_Subheader) {
+        // rank / total players
+        nvg::FontSize(S_FontSize);
+        nvg::FillColor(S_FontColor);
+        nvg::Text(
+            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posY + S_BackgroundYPad + subheaderRankOffsetY,
+            subheaderRank
+        );
+
+        // division
+        nvg::Text(
+            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posY + S_BackgroundYPad + subheaderDivOffsetY,
+            subheaderDiv
+        );
+    }
+
+    //#########################################################################
+
+    // if (S_Qualifier && gameMode == "TM_COTDQualifications_Online") {
         qualiRank = GetQualiRank();
 
         UI::Begin(title, S_Qualifier, UI::WindowFlags::AlwaysAutoResize);
@@ -83,38 +169,38 @@ void Render() {
             }
 
         UI::End();
-    } else if (S_Knockout && gameMode == "TM_KnockoutDaily_Online") {
-        SetKoInfo();
+    // } else if (S_Knockout && gameMode == "TM_KnockoutDaily_Online") {
+    //     SetKoInfo();
 
-        UI::Begin(title, S_Knockout, UI::WindowFlags::AlwaysAutoResize);
-            UI::Text("rerun: " + (edition > 1));
-            UI::Text("total players: " + totalPlayers);
-            UI::Text("total divisions: " + Math::Ceil(float(totalPlayers) / 64.0f));
-            UI::Text("division: " + division);
-            UI::Text("rank: " + divisionRank);
-            UI::Text("players left: " + playersLeft);
-            UI::Text("alive: " + alive);
+    //     UI::Begin(title, S_Knockout, UI::WindowFlags::AlwaysAutoResize);
+    //         UI::Text("rerun: " + (edition > 1));
+    //         UI::Text("total players: " + totalPlayers);
+    //         UI::Text("total divisions: " + Math::Ceil(float(totalPlayers) / 64.0f));
+    //         UI::Text("division: " + division);
+    //         UI::Text("rank: " + divisionRank);
+    //         UI::Text("players left: " + playersLeft);
+    //         UI::Text("alive: " + alive);
 
-            UI::Separator();
+    //         UI::Separator();
 
-            if (edition > 1) {
-                UI::Text(                                    "Rank 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1,  true)));
-                UI::Text(                                    "Rank 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2,  true)));
-                UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3,  true)));
-                UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4,  true)));
-                UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9,  true)));
-                UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33, true)));
-            } else {
-                UI::Text(                                    "Rank 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1)));
-                UI::Text(                                    "Rank 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2)));
-                UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3)));
-                UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4)));
-                UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9)));
-                UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33)));
-            }
+    //         if (edition > 1) {
+    //             UI::Text(                                    "Rank 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1,  true)));
+    //             UI::Text(                                    "Rank 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2,  true)));
+    //             UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3,  true)));
+    //             UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4,  true)));
+    //             UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9,  true)));
+    //             UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33, true)));
+    //         } else {
+    //             UI::Text(                                    "Rank 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1)));
+    //             UI::Text(                                    "Rank 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2)));
+    //             UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3)));
+    //             UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4)));
+    //             UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9)));
+    //             UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33)));
+    //         }
 
-        UI::End();
-    }
+    //     UI::End();
+    // }
 
     RenderDebug();
 }
