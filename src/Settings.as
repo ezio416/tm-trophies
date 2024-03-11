@@ -57,7 +57,7 @@ Font S_Font = Font::DroidSansBold;
 uint S_HeaderFontSize = 24;
 
 [Setting category="Position/Style" name="Font size" min=8 max=72]
-uint S_FontSize = 20;
+uint S_FontSize = 18;
 
 [Setting category="Position/Style" name="Font color" color]
 vec4 S_FontColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);

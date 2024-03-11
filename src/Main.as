@@ -76,7 +76,7 @@ void Render() {
     nvg::FontSize(S_FontSize);
     const string subheaderRank = "Rank " + qualiRank + " / " + 2717;
     const vec2 subheaderRankSize = nvg::TextBounds(subheaderRank);
-    const float subheaderRankOffsetY = headerSize.y + S_HeaderFontSize * 0.2f;
+    const float subheaderRankOffsetY = S_Header ? headerSize.y + S_HeaderFontSize * 0.2f : 0.0f;
 
     if (S_Subheader)
         maxTextWidth = Math::Max(maxTextWidth, subheaderRankSize.x);
