@@ -1,5 +1,5 @@
 // c 2024-02-29
-// m 2024-03-03
+// m 2024-03-05
 
 uint         challengeId         = 0;
 uint         edition             = 0;
@@ -83,7 +83,7 @@ void SetCotdInfo() {
         return;
     }
 
-    if (totalPlayers == totalPlayersDefault) {
+    if (totalPlayers == 0) {
         print("getting total players another way");
 
         if (info.HasKey("challenge")) {
