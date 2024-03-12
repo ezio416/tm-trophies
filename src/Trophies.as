@@ -91,7 +91,7 @@ int CotdKnockoutTrophies(int players, int div, int divRank, bool rerun = false) 
     const float percent = TopPercentage(players, div);
 
     // top 100%
-    if (percent > 0.5) {
+    if (percent > 0.5f) {
         if (divRank > 32) return trophy4 * 3;
         if (divRank > 8)  return trophy4 * 6;
         if (divRank > 3)  return trophy5;
@@ -101,7 +101,7 @@ int CotdKnockoutTrophies(int players, int div, int divRank, bool rerun = false) 
     }
 
     // top 50%
-    if (percent > 0.25) {
+    if (percent > 0.25f) {
         if (divRank > 32) return trophy4 * 6;
         if (divRank > 8)  return trophy4 * 9;
         if (divRank > 3)  return trophy5 * 4;
@@ -111,7 +111,7 @@ int CotdKnockoutTrophies(int players, int div, int divRank, bool rerun = false) 
     }
 
     // top 25%
-    if (percent > 0.1) {
+    if (percent > 0.1f) {
         if (divRank > 32) return trophy5;
         if (divRank > 8)  return trophy5 * 3;
         if (divRank > 3)  return trophy5 * 7;
