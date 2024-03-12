@@ -1,14 +1,13 @@
 // c 2024-02-29
 // m 2024-03-11
 
-int          challengeId         = 0;
-int          edition             = 0;
-const string mapMonitorUrl       = "https://map-monitor.xk.io/cached";
+int          challengeId   = 0;
+int          edition       = 0;
+const string mapMonitorUrl = "https://map-monitor.xk.io/cached";
 string       name;
-uint64       nextRequest         = 0;
-int          totalPlayers        = 0;
-const int    totalPlayersDefault = 3000;
-const uint64 waitTime            = 15000;
+uint64       nextRequest   = 0;
+int          totalPlayers  = 0;
+const uint64 waitTime      = 15000;
 
 void SetCotdInfo() {
     uint64 now = Time::Now;
@@ -60,7 +59,6 @@ void SetCotdInfo() {
         else {
             warn("competition missing key 'name'");
             name = "";
-            totalPlayers = 0;
             return;
         }
 
@@ -68,13 +66,11 @@ void SetCotdInfo() {
             totalPlayers = int(competition["nbPlayers"]);
         else {
             warn("competition missing key 'nbPlayers'");
-            totalPlayers = 0;
             return;
         }
     } else {
         warn("response missing key 'competition'");
         name = "";
-        totalPlayers = 0;
         return;
     }
 
@@ -93,8 +89,6 @@ void SetCotdInfo() {
     }
 
     if (totalPlayers == 0) {
-        totalPlayers = totalPlayersDefault;
-
         trace("got 0 players, trying another way");
 
         CTrackMania@ App = cast<CTrackMania@>(GetApp());

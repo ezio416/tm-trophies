@@ -21,8 +21,10 @@ void Main() {
 
         if (gameMode == "TM_COTDQualifications_Online" || gameMode == "TM_KnockoutDaily_Online")
             SetCotdInfo();
-        else
+        else {
             gottenRank = 0;
+            totalPlayers = 0;
+        }
 
         yield();
     }
