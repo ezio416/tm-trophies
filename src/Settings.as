@@ -24,10 +24,10 @@ bool S_Debug = false;
 
 
 [Setting category="Position/Style" name="Position X" min=0.0f max=1.0f]
-float S_X = 0.9f;
+float S_X = 0.0f;
 
 [Setting category="Position/Style" name="Position Y" min=0.0f max=1.0f]
-float S_Y = 0.15f;
+float S_Y = 0.13f;
 
 [Setting category="Position/Style" name="Show background"]
 bool S_Background = true;
@@ -42,7 +42,7 @@ float S_BackgroundXPad = 8.0f;
 float S_BackgroundYPad = 8.0f;
 
 [Setting category="Position/Style" name="Background corner radius" min=0.0f max=50.0f]
-float S_BackgroundRadius = 10.0f;
+float S_BackgroundRadius = 15.0f;
 
 [Setting category="Position/Style" name="Show header"]
 bool S_Header = true;

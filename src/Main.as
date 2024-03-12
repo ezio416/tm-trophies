@@ -57,24 +57,32 @@ void Render() {
     )
         return;
 
+    RenderQualifier();
+    RenderKnockout();
+    RenderDebug();
+}
+
+void RenderQualifier() {
+    if (!S_Qualifier || gameMode != "TM_COTDQualifications_Online")
+        return;
+
+    qualiRank = GetQualiRank();
+
     const float posX = Draw::GetWidth() * S_X;
     const float posY = Draw::GetHeight() * S_Y;
 
     nvg::FontFace(font);
 
     nvg::FontSize(S_HeaderFontSize);
-    // const string header = "COT" + (edition == 1 ? "D" : edition == 2 ? "N" : "M") + (gameMode == "TM_COTDQualifications_Online" ? " Qualifier" : " Knockout");
-    const string header = Icons::Trophy + " COTD Qualifier " + Icons::Trophy;
+    const string header = Icons::Trophy + " COT" + (edition == 1 ? "D" : edition == 2 ? "N" : edition == 3 ? "M" : "?") + " Qualifier " + Icons::Trophy;
     const vec2 headerSize = nvg::TextBounds(header);
 
     nvg::FontSize(S_FontSize);
-    // const string subheader1 = "Rank " + qualiRank + " / " + totalPlayers;
-    const string subheader1 = "Rank " + qualiRank + " / " + 2717;
+    const string subheader1 = "Rank " + qualiRank + " / " + totalPlayers;
     const vec2 subheader1Size = nvg::TextBounds(subheader1);
     const float subheader1OffsetY = S_Header ? headerSize.y + S_HeaderFontSize * 0.4f : 0.0f;
 
-    // const string subheader2 = "Division " + division + (gameMode == "TM_KnockoutDaily_Online" ? " / " + int(Math::Ceil(float(totalPlayers) / 64.0f)) : "");
-    const string subheader2 = "Division " + 14;
+    const string subheader2 = "Division " + division + " / " + int(Math::Ceil(float(totalPlayers) / 64.0f));
     const vec2 subheader2Size = nvg::TextBounds(subheader2);
     const float subheader2OffsetY = subheader1OffsetY + subheader1Size.y;
 
@@ -111,11 +119,11 @@ void Render() {
     const vec2 rank51_100Size  = nvg::TextBounds(rank51_100);
     const vec2 rank101_250Size = nvg::TextBounds(rank101_250);
 
-    vec2 rank251PlusSize   = vec2();
-    vec2 rank251_500Size   = vec2();
-    vec2 rank501_1000Size  = vec2();
-    vec2 rank1001_2500Size = vec2();
-    vec2 rank2501PlusSize  = vec2();
+    vec2 rank251PlusSize;
+    vec2 rank251_500Size;
+    vec2 rank501_1000Size;
+    vec2 rank1001_2500Size;
+    vec2 rank2501PlusSize;
 
     if (edition > 1)
         rank251PlusSize = nvg::TextBounds(rank251Plus);
@@ -163,13 +171,15 @@ void Render() {
         nvg::Fill();
     }
 
+    const float posMidWidth = posX + S_BackgroundXPad + maxTextWidth * 0.5f;
+
     nvg::TextAlign(nvg::Align::Center | nvg::Align::Top);
 
     if (S_Header) {
         nvg::FontSize(S_HeaderFontSize);
         nvg::FillColor(S_FontColor);
         nvg::Text(
-            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posMidWidth,
             posY + S_BackgroundYPad,
             header
         );
@@ -180,14 +190,14 @@ void Render() {
         nvg::FontSize(S_FontSize);
         nvg::FillColor(S_FontColor);
         nvg::Text(
-            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posMidWidth,
             posY + S_BackgroundYPad + subheader1OffsetY,
             subheader1
         );
 
         // division
         nvg::Text(
-            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posMidWidth,
             posY + S_BackgroundYPad + subheader2OffsetY,
             subheader2
         );
@@ -197,49 +207,49 @@ void Render() {
 
     nvg::FillColor(qualiRank == 1 ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
-        posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+        posMidWidth,
         posY + S_BackgroundYPad + rank1OffsetY,
         rank1
     );
 
     nvg::FillColor(qualiRank == 2 ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
-        posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+        posMidWidth,
         posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y,
         rank2
     );
 
     nvg::FillColor(qualiRank == 3 ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
-        posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+        posMidWidth,
         posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 2.0f,
         rank3
     );
 
     nvg::FillColor(IsBetweenInclusive(qualiRank, 4, 10) ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
-        posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+        posMidWidth,
         posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 3.0f,
         rank4_10
     );
 
     nvg::FillColor(IsBetweenInclusive(qualiRank, 11, 50) ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
-        posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+        posMidWidth,
         posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 4.0f,
         rank11_50
     );
 
     nvg::FillColor(IsBetweenInclusive(qualiRank, 51, 100) ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
-        posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+        posMidWidth,
         posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 5.0f,
         rank51_100
     );
 
     nvg::FillColor(IsBetweenInclusive(qualiRank, 101, 250) ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
-        posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+        posMidWidth,
         posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 6.0f,
         rank101_250
     );
@@ -247,107 +257,73 @@ void Render() {
     if (edition > 1) {
         nvg::FillColor(qualiRank > 250 ? S_FontHighlightColor : S_FontColor);
         nvg::Text(
-            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posMidWidth,
             posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 7.0f,
             rank251Plus
         );
     } else {
         nvg::FillColor(IsBetweenInclusive(qualiRank, 251, 500) ? S_FontHighlightColor : S_FontColor);
         nvg::Text(
-            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posMidWidth,
             posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 7.0f,
             rank251_500
         );
 
         nvg::FillColor(IsBetweenInclusive(qualiRank, 501, 1000) ? S_FontHighlightColor : S_FontColor);
         nvg::Text(
-            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posMidWidth,
             posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 8.0f,
             rank501_1000
         );
 
         nvg::FillColor(IsBetweenInclusive(qualiRank, 1001, 2500) ? S_FontHighlightColor : S_FontColor);
         nvg::Text(
-            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posMidWidth,
             posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 9.0f,
             rank1001_2500
         );
 
         nvg::FillColor(qualiRank > 2500 ? S_FontHighlightColor : S_FontColor);
         nvg::Text(
-            posX + S_BackgroundXPad + maxTextWidth * 0.5f,
+            posMidWidth,
             posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 10.0f,
             rank2501Plus
         );
     }
+}
 
-    //#########################################################################
+void RenderKnockout() {
+    if (!S_Knockout || gameMode != "TM_KnockoutDaily_Online")
+        return;
 
-    // if (S_Qualifier && gameMode == "TM_COTDQualifications_Online") {
-        qualiRank = GetQualiRank();
+    SetKoInfo();
 
-        UI::Begin(title, S_Qualifier, UI::WindowFlags::AlwaysAutoResize);
-            UI::Text("total players: " + totalPlayers);
-            UI::Text("rank: " + qualiRank);
+    UI::Begin(title, S_Knockout, UI::WindowFlags::AlwaysAutoResize);
+        UI::Text("rerun: " + (edition > 1));
+        UI::Text("total players: " + totalPlayers);
+        UI::Text("total divisions: " + Math::Ceil(float(totalPlayers) / 64.0f));
+        UI::Text("division: " + division);
+        UI::Text("rank: " + divisionRank);
+        UI::Text("players left: " + playersLeft);
+        UI::Text("alive: " + alive);
 
-            UI::Separator();
+        UI::Separator();
 
-            if (edition > 1) {
-                UI::Text((qualiRank == 1 ? GREEN : WHITE)                          + "Rank 1: "       + InsertSeparators(CotdQualifierTrophies(1,   true)));
-                UI::Text((qualiRank == 2 ? GREEN : WHITE)                          + "Rank 2: "       + InsertSeparators(CotdQualifierTrophies(2,   true)));
-                UI::Text((qualiRank == 3 ? GREEN : WHITE)                          + "Rank 3: "       + InsertSeparators(CotdQualifierTrophies(3,   true)));
-                UI::Text((IsBetweenInclusive(qualiRank, 4, 10) ? GREEN : WHITE)    + "Rank 4-10: "    + InsertSeparators(CotdQualifierTrophies(4,   true)));
-                UI::Text((IsBetweenInclusive(qualiRank, 11, 51) ? GREEN : WHITE)   + "Rank 11-50: "   + InsertSeparators(CotdQualifierTrophies(11,  true)));
-                UI::Text((IsBetweenInclusive(qualiRank, 51, 100) ? GREEN : WHITE)  + "Rank 51-100: "  + InsertSeparators(CotdQualifierTrophies(51,  true)));
-                UI::Text((IsBetweenInclusive(qualiRank, 101, 250) ? GREEN : WHITE) + "Rank 101-250: " + InsertSeparators(CotdQualifierTrophies(101, true)));
-                UI::Text((qualiRank > 250 ? GREEN : WHITE)                         + "Rank 251+: "    + InsertSeparators(CotdQualifierTrophies(251, true)));
-            } else {
-                UI::Text((qualiRank == 1                            ? GREEN : WHITE) + "Rank 1: "         + InsertSeparators(CotdQualifierTrophies(1)));
-                UI::Text((qualiRank == 2                            ? GREEN : WHITE) + "Rank 2: "         + InsertSeparators(CotdQualifierTrophies(2)));
-                UI::Text((qualiRank == 3                            ? GREEN : WHITE) + "Rank 3: "         + InsertSeparators(CotdQualifierTrophies(3)));
-                UI::Text((IsBetweenInclusive(qualiRank, 4, 10)      ? GREEN : WHITE) + "Rank 4-10: "      + InsertSeparators(CotdQualifierTrophies(4)));
-                UI::Text((IsBetweenInclusive(qualiRank, 11, 50)     ? GREEN : WHITE) + "Rank 11-50: "     + InsertSeparators(CotdQualifierTrophies(11)));
-                UI::Text((IsBetweenInclusive(qualiRank, 51, 100)    ? GREEN : WHITE) + "Rank 51-100: "    + InsertSeparators(CotdQualifierTrophies(51)));
-                UI::Text((IsBetweenInclusive(qualiRank, 101, 250)   ? GREEN : WHITE) + "Rank 101-250: "   + InsertSeparators(CotdQualifierTrophies(101)));
-                UI::Text((IsBetweenInclusive(qualiRank, 251, 500)   ? GREEN : WHITE) + "Rank 251-500: "   + InsertSeparators(CotdQualifierTrophies(251)));
-                UI::Text((IsBetweenInclusive(qualiRank, 501, 1000)  ? GREEN : WHITE) + "Rank 501-1000: "  + InsertSeparators(CotdQualifierTrophies(501)));
-                UI::Text((IsBetweenInclusive(qualiRank, 1001, 2500) ? GREEN : WHITE) + "Rank 1001-2500: " + InsertSeparators(CotdQualifierTrophies(1001)));
-                UI::Text((qualiRank > 2500                          ? GREEN : WHITE) + "Rank 2501+: "     + InsertSeparators(CotdQualifierTrophies(2501)));
-            }
+        if (edition > 1) {
+            UI::Text(                                    "Rank 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1,  true)));
+            UI::Text(                                    "Rank 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2,  true)));
+            UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3,  true)));
+            UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4,  true)));
+            UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9,  true)));
+            UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33, true)));
+        } else {
+            UI::Text(                                    "Rank 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1)));
+            UI::Text(                                    "Rank 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2)));
+            UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3)));
+            UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4)));
+            UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9)));
+            UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33)));
+        }
 
-        UI::End();
-    // } else if (S_Knockout && gameMode == "TM_KnockoutDaily_Online") {
-    //     SetKoInfo();
-
-    //     UI::Begin(title, S_Knockout, UI::WindowFlags::AlwaysAutoResize);
-    //         UI::Text("rerun: " + (edition > 1));
-    //         UI::Text("total players: " + totalPlayers);
-    //         UI::Text("total divisions: " + Math::Ceil(float(totalPlayers) / 64.0f));
-    //         UI::Text("division: " + division);
-    //         UI::Text("rank: " + divisionRank);
-    //         UI::Text("players left: " + playersLeft);
-    //         UI::Text("alive: " + alive);
-
-    //         UI::Separator();
-
-    //         if (edition > 1) {
-    //             UI::Text(                                    "Rank 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1,  true)));
-    //             UI::Text(                                    "Rank 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2,  true)));
-    //             UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3,  true)));
-    //             UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4,  true)));
-    //             UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9,  true)));
-    //             UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33, true)));
-    //         } else {
-    //             UI::Text(                                    "Rank 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1)));
-    //             UI::Text(                                    "Rank 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2)));
-    //             UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3)));
-    //             UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4)));
-    //             UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9)));
-    //             UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33)));
-    //         }
-
-    //     UI::End();
-    // }
-
-    RenderDebug();
+    UI::End();
 }
