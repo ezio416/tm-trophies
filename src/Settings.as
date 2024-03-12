@@ -61,3 +61,6 @@ uint S_FontSize = 18;
 
 [Setting category="Position/Style" name="Font color" color]
 vec4 S_FontColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+
+[Setting category="Position/Style" name="Font color (highlight)" color]
+vec4 S_FontHighlightColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);
