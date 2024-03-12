@@ -47,7 +47,7 @@ float S_BackgroundRadius = 15.0f;
 [Setting category="Position/Style" name="Show header"]
 bool S_Header = true;
 
-[Setting category="Position/Style" name="Show subheader" description="Rank/division"]
+[Setting category="Position/Style" name="Show subheader" description="Rank/remaining/division"]
 bool S_Subheader = true;
 
 [Setting category="Position/Style" name="Font style"]
