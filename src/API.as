@@ -18,8 +18,6 @@ void SetCotdInfo() {
 
     nextRequest = now + waitTime + Math::Rand(0, 5000);
 
-    print("SetCotdInfo");
-
     Net::HttpRequest@ req = Net::HttpGet(mapMonitorUrl + "/api/cup-of-the-day/current");
 
     while (!req.Finished())
@@ -97,7 +95,7 @@ void SetCotdInfo() {
     if (totalPlayers == 0) {
         totalPlayers = totalPlayersDefault;
 
-        print("getting total players another way");
+        trace("got 0 players, trying another way");
 
         CTrackMania@ App = cast<CTrackMania@>(GetApp());
         if (App.RootMap is null) {

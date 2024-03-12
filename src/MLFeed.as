@@ -4,6 +4,7 @@
 bool alive        = false;
 int  division     = 0;
 int  divisionRank = 0;
+int  gottenRank   = 0;
 int  playersLeft  = 0;
 int  qualiRank    = 0;
 bool wasAlive     = false;
@@ -41,6 +42,8 @@ void SetKoInfo() {
         wasAlive = true;
     } else {
         if (wasAlive) {
+            gottenRank = divisionRank;
+
             string msg = "got rank " + divisionRank + " of div " + division;
             print(msg);
             UI::ShowNotification(title, msg);

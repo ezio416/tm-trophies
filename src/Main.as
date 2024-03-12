@@ -21,6 +21,8 @@ void Main() {
 
         if (gameMode == "TM_COTDQualifications_Online" || gameMode == "TM_KnockoutDaily_Online")
             SetCotdInfo();
+        else
+            gottenRank = 0;
 
         yield();
     }
@@ -78,12 +80,12 @@ void RenderQualifier() {
     const vec2 headerSize = nvg::TextBounds(header);
 
     nvg::FontSize(S_FontSize);
+
     const string subheader1 = "Rank " + qualiRank + " / " + totalPlayers;
     const vec2 subheader1Size = nvg::TextBounds(subheader1);
     const float subheader1OffsetY = S_Header ? headerSize.y + S_HeaderFontSize * 0.4f : 0.0f;
 
-    const string subheader2 = "Division " + division + " / " + int(Math::Ceil(float(totalPlayers) / 64.0f));
-    const vec2 subheader2Size = nvg::TextBounds(subheader2);
+    const string subheader2 = "Division " + int(Math::Ceil(float(qualiRank) / 64.0f)) + " / " + int(Math::Ceil(float(totalPlayers) / 64.0f));
     const float subheader2OffsetY = subheader1OffsetY + subheader1Size.y;
 
     const string rank1       = "1: "       + InsertSeparators(CotdQualifierTrophies(1,   edition > 1));
@@ -109,53 +111,30 @@ void RenderQualifier() {
         rank2501Plus  = "2501+: "     + InsertSeparators(CotdQualifierTrophies(2501));
     }
 
-    const float rank1OffsetY = S_Subheader ? subheader2OffsetY + subheader2Size.y * 1.5f : subheader1OffsetY;
-
-    const vec2 rank1Size       = nvg::TextBounds(rank1);
-    const vec2 rank2Size       = nvg::TextBounds(rank2);
-    const vec2 rank3Size       = nvg::TextBounds(rank3);
-    const vec2 rank4_10Size    = nvg::TextBounds(rank4_10);
-    const vec2 rank11_50Size   = nvg::TextBounds(rank11_50);
-    const vec2 rank51_100Size  = nvg::TextBounds(rank51_100);
-    const vec2 rank101_250Size = nvg::TextBounds(rank101_250);
-
-    vec2 rank251PlusSize;
-    vec2 rank251_500Size;
-    vec2 rank501_1000Size;
-    vec2 rank1001_2500Size;
-    vec2 rank2501PlusSize;
-
-    if (edition > 1)
-        rank251PlusSize = nvg::TextBounds(rank251Plus);
-    else {
-        rank251_500Size   = nvg::TextBounds(rank251_500);
-        rank501_1000Size  = nvg::TextBounds(rank501_1000);
-        rank1001_2500Size = nvg::TextBounds(rank1001_2500);
-        rank2501PlusSize  = nvg::TextBounds(rank2501Plus);
-    }
+    const float rank1OffsetY = S_Subheader ? subheader2OffsetY + subheader1Size.y * 1.5f : subheader1OffsetY;
 
     float maxTextWidth = 0.0f;
     if (S_Header)
         maxTextWidth = headerSize.x;
     if (S_Subheader) {
         maxTextWidth = Math::Max(maxTextWidth, subheader1Size.x);
-        maxTextWidth = Math::Max(maxTextWidth, subheader2Size.x);
+        maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(subheader2).x);
     }
-    maxTextWidth = Math::Max(maxTextWidth, rank1Size.x);
-    maxTextWidth = Math::Max(maxTextWidth, rank2Size.x);
-    maxTextWidth = Math::Max(maxTextWidth, rank3Size.x);
-    maxTextWidth = Math::Max(maxTextWidth, rank4_10Size.x);
-    maxTextWidth = Math::Max(maxTextWidth, rank11_50Size.x);
-    maxTextWidth = Math::Max(maxTextWidth, rank51_100Size.x);
-    maxTextWidth = Math::Max(maxTextWidth, rank101_250Size.x);
+    // maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank1).x);
+    // maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank2).x);
+    // maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank3).x);
+    // maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank4_10).x);
+    // maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank11_50).x);
+    maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank51_100).x);
+    maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank101_250).x);
 
     if (edition > 1)
-        maxTextWidth = Math::Max(maxTextWidth, rank251PlusSize.x);
+        maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank251Plus).x);
     else {
-        maxTextWidth = Math::Max(maxTextWidth, rank251_500Size.x);
-        maxTextWidth = Math::Max(maxTextWidth, rank501_1000Size.x);
-        maxTextWidth = Math::Max(maxTextWidth, rank1001_2500Size.x);
-        maxTextWidth = Math::Max(maxTextWidth, rank2501PlusSize.x);
+        // maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank251_500).x);
+        // maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank501_1000).x);
+        maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank1001_2500).x);
+        // maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank2501Plus).x);
     }
 
     if (S_Background) {
@@ -165,7 +144,7 @@ void RenderQualifier() {
             posX,
             posY,
             maxTextWidth + S_BackgroundXPad * 2.0f,
-            rank1OffsetY + rank1Size.y * (edition > 1 ? 8.0f : 11.0f) + S_BackgroundYPad * 2.0f,
+            rank1OffsetY + subheader1Size.y * (edition > 1 ? 8.0f : 11.0f) + S_BackgroundYPad * 2.0f,
             S_BackgroundRadius
         );
         nvg::Fill();
@@ -215,42 +194,42 @@ void RenderQualifier() {
     nvg::FillColor(qualiRank == 2 ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
         posMidWidth,
-        posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y,
         rank2
     );
 
     nvg::FillColor(qualiRank == 3 ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
         posMidWidth,
-        posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 2.0f,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 2.0f,
         rank3
     );
 
     nvg::FillColor(IsBetweenInclusive(qualiRank, 4, 10) ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
         posMidWidth,
-        posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 3.0f,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 3.0f,
         rank4_10
     );
 
     nvg::FillColor(IsBetweenInclusive(qualiRank, 11, 50) ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
         posMidWidth,
-        posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 4.0f,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 4.0f,
         rank11_50
     );
 
     nvg::FillColor(IsBetweenInclusive(qualiRank, 51, 100) ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
         posMidWidth,
-        posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 5.0f,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 5.0f,
         rank51_100
     );
 
     nvg::FillColor(IsBetweenInclusive(qualiRank, 101, 250) ? S_FontHighlightColor : S_FontColor);
     nvg::Text(
         posMidWidth,
-        posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 6.0f,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 6.0f,
         rank101_250
     );
 
@@ -258,35 +237,35 @@ void RenderQualifier() {
         nvg::FillColor(qualiRank > 250 ? S_FontHighlightColor : S_FontColor);
         nvg::Text(
             posMidWidth,
-            posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 7.0f,
+            posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 7.0f,
             rank251Plus
         );
     } else {
         nvg::FillColor(IsBetweenInclusive(qualiRank, 251, 500) ? S_FontHighlightColor : S_FontColor);
         nvg::Text(
             posMidWidth,
-            posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 7.0f,
+            posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 7.0f,
             rank251_500
         );
 
         nvg::FillColor(IsBetweenInclusive(qualiRank, 501, 1000) ? S_FontHighlightColor : S_FontColor);
         nvg::Text(
             posMidWidth,
-            posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 8.0f,
+            posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 8.0f,
             rank501_1000
         );
 
         nvg::FillColor(IsBetweenInclusive(qualiRank, 1001, 2500) ? S_FontHighlightColor : S_FontColor);
         nvg::Text(
             posMidWidth,
-            posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 9.0f,
+            posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 9.0f,
             rank1001_2500
         );
 
         nvg::FillColor(qualiRank > 2500 ? S_FontHighlightColor : S_FontColor);
         nvg::Text(
             posMidWidth,
-            posY + S_BackgroundYPad + rank1OffsetY + rank1Size.y * 10.0f,
+            posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 10.0f,
             rank2501Plus
         );
     }
@@ -298,32 +277,135 @@ void RenderKnockout() {
 
     SetKoInfo();
 
-    UI::Begin(title, S_Knockout, UI::WindowFlags::AlwaysAutoResize);
-        UI::Text("rerun: " + (edition > 1));
-        UI::Text("total players: " + totalPlayers);
-        UI::Text("total divisions: " + Math::Ceil(float(totalPlayers) / 64.0f));
-        UI::Text("division: " + division);
-        UI::Text("rank: " + divisionRank);
-        UI::Text("players left: " + playersLeft);
-        UI::Text("alive: " + alive);
+    const float posX = Draw::GetWidth() * S_X;
+    const float posY = Draw::GetHeight() * S_Y;
 
-        UI::Separator();
+    nvg::FontFace(font);
 
-        if (edition > 1) {
-            UI::Text(                                    "Rank 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1,  true)));
-            UI::Text(                                    "Rank 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2,  true)));
-            UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3,  true)));
-            UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4,  true)));
-            UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9,  true)));
-            UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33, true)));
-        } else {
-            UI::Text(                                    "Rank 1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1)));
-            UI::Text(                                    "Rank 2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2)));
-            UI::Text((playersLeft > 2  ? WHITE : GRAY) + "Rank 3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3)));
-            UI::Text((playersLeft > 3  ? WHITE : GRAY) + "Rank 4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4)));
-            UI::Text((playersLeft > 8  ? WHITE : GRAY) + "Rank 9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9)));
-            UI::Text((playersLeft > 32 ? WHITE : GRAY) + "Rank 33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33)));
-        }
+    nvg::FontSize(S_HeaderFontSize);
+    const string header = Icons::Trophy + " COT" + (edition == 1 ? "D" : edition == 2 ? "N" : edition == 3 ? "M" : "?") + " Knockout " + Icons::Trophy;
+    const vec2 headerSize = nvg::TextBounds(header);
 
-    UI::End();
+    nvg::FontSize(S_FontSize);
+
+    const int totalDivisions = int(Math::Ceil(float(totalPlayers) / 64.0f));
+
+    const string subheader1 = "Remaining " + playersLeft + " / " + (division == totalDivisions ? totalPlayers % 64 : 64);
+    const vec2 subheader1Size = nvg::TextBounds(subheader1);
+    const float subheader1OffsetY = S_Header ? headerSize.y + S_HeaderFontSize * 0.4f : 0.0f;
+
+    const string subheader2 = "Division " + division + " / " + totalDivisions;
+    const float subheader2OffsetY = subheader1OffsetY + subheader1Size.y;
+
+    const string rank1      = "1: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 1,  edition > 1));
+    const string rank2      = "2: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 2,  edition > 1));
+    const string rank3      = "3: "    + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 3,  edition > 1));
+    const string rank4_8    = "4-8: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 4,  edition > 1));
+    const string rank9_32   = "9-32: " + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 9,  edition > 1));
+    const string rank33Plus = "33+: "  + InsertSeparators(CotdKnockoutTrophies(totalPlayers, division, 33, edition > 1));
+
+    const float rank1OffsetY = S_Subheader ? subheader2OffsetY + subheader1Size.y * 1.5f : subheader1OffsetY;
+
+    float maxTextWidth = 0.0f;
+    if (S_Header)
+        maxTextWidth = headerSize.x;
+    if (S_Subheader) {
+        maxTextWidth = Math::Max(maxTextWidth, subheader1Size.x);
+        maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(subheader2).x);
+    }
+    maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank1).x);
+    maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank2).x);
+    maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank3).x);
+    maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank4_8).x);
+    maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank9_32).x);
+    maxTextWidth = Math::Max(maxTextWidth, nvg::TextBounds(rank33Plus).x);
+
+    if (S_Background) {
+        nvg::FillColor(S_BackgroundColor);
+        nvg::BeginPath();
+        nvg::RoundedRect(
+            posX,
+            posY,
+            maxTextWidth + S_BackgroundXPad * 2.0f,
+            rank1OffsetY + subheader1Size.y * 6.0f + S_BackgroundYPad * 2.0f,
+            S_BackgroundRadius
+        );
+        nvg::Fill();
+    }
+
+    const float posMidWidth = posX + S_BackgroundXPad + maxTextWidth * 0.5f;
+
+    nvg::TextAlign(nvg::Align::Center | nvg::Align::Top);
+
+    if (S_Header) {
+        nvg::FontSize(S_HeaderFontSize);
+        nvg::FillColor(S_FontColor);
+        nvg::Text(
+            posMidWidth,
+            posY + S_BackgroundYPad,
+            header
+        );
+    }
+
+    if (S_Subheader) {
+        // players left / players in division
+        nvg::FontSize(S_FontSize);
+        nvg::FillColor(S_FontColor);
+        nvg::Text(
+            posMidWidth,
+            posY + S_BackgroundYPad + subheader1OffsetY,
+            subheader1
+        );
+
+        // division
+        nvg::Text(
+            posMidWidth,
+            posY + S_BackgroundYPad + subheader2OffsetY,
+            subheader2
+        );
+    }
+
+    nvg::FontSize(S_FontSize);
+
+    nvg::FillColor(gottenRank == 1 ? S_FontHighlightColor : alive ? S_FontColor : S_FontDisabledColor);
+    nvg::Text(
+        posMidWidth,
+        posY + S_BackgroundYPad + rank1OffsetY,
+        rank1
+    );
+
+    nvg::FillColor(gottenRank == 2 ? S_FontHighlightColor : alive ? S_FontColor : S_FontDisabledColor);
+    nvg::Text(
+        posMidWidth,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y,
+        rank2
+    );
+
+    nvg::FillColor(gottenRank == 3 ? S_FontHighlightColor : alive && playersLeft > 2 ? S_FontColor : S_FontDisabledColor);
+    nvg::Text(
+        posMidWidth,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 2.0f,
+        rank3
+    );
+
+    nvg::FillColor(IsBetweenInclusive(gottenRank, 4, 8) ? S_FontHighlightColor : alive && playersLeft > 3 ? S_FontColor : S_FontDisabledColor);
+    nvg::Text(
+        posMidWidth,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 3.0f,
+        rank4_8
+    );
+
+    nvg::FillColor(IsBetweenInclusive(gottenRank, 9, 32) ? S_FontHighlightColor : alive && playersLeft > 8 ? S_FontColor : S_FontDisabledColor);
+    nvg::Text(
+        posMidWidth,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 4.0f,
+        rank9_32
+    );
+
+    nvg::FillColor(gottenRank > 32 ? S_FontHighlightColor : alive && playersLeft > 32 ? S_FontColor : S_FontDisabledColor);
+    nvg::Text(
+        posMidWidth,
+        posY + S_BackgroundYPad + rank1OffsetY + subheader1Size.y * 5.0f,
+        rank33Plus
+    );
 }

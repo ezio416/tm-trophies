@@ -64,3 +64,6 @@ vec4 S_FontColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 [Setting category="Position/Style" name="Font color (highlight)" color]
 vec4 S_FontHighlightColor = vec4(0.0f, 1.0f, 0.0f, 1.0f);
+
+[Setting category="Position/Style" name="Font color (disabled)" color description="Shown when value is no longer possible to get"]
+vec4 S_FontDisabledColor = vec4(0.3f, 0.3f, 0.3f, 1.0f);
