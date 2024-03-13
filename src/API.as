@@ -1,5 +1,5 @@
 // c 2024-02-29
-// m 2024-03-11
+// m 2024-03-13
 
 int          challengeId   = 0;
 int          edition       = 0;
@@ -32,6 +32,8 @@ void SetCotdInfo() {
 
     Json::Value@ info;
 
+    int players = 0;
+
     try {
         @info = Json::Parse(text);
         Json::Type type = info.GetType();
@@ -62,9 +64,11 @@ void SetCotdInfo() {
             return;
         }
 
-        if (competition.HasKey("nbPlayers"))
-            totalPlayers = int(competition["nbPlayers"]);
-        else {
+        if (competition.HasKey("nbPlayers")) {
+            players = int(competition["nbPlayers"]);
+            if (players > 0)
+                totalPlayers = players;
+        } else {
             warn("competition missing key 'nbPlayers'");
             return;
         }
@@ -88,8 +92,8 @@ void SetCotdInfo() {
         challengeId = 0;
     }
 
-    if (totalPlayers == 0) {
-        trace("got 0 players, trying another way");
+    if (players == 0) {
+        // trace("got 0 players, trying another way");
 
         CTrackMania@ App = cast<CTrackMania@>(GetApp());
         if (App.RootMap is null) {
@@ -120,9 +124,11 @@ void SetCotdInfo() {
             return;
         }
 
-        if (info.HasKey("cardinal"))
-            totalPlayers = int(info["cardinal"]);
-        else
+        if (info.HasKey("cardinal")) {
+            players = int(info["cardinal"]);
+            if (players > 0)
+                totalPlayers = players;
+        } else
             warn("response missing key 'cardinal'");
     }
 }
