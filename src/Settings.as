@@ -1,5 +1,5 @@
 // c 2024-02-16
-// m 2024-03-11
+// m 2024-03-13
 
 [Setting category="General" name="Enabled"]
 bool S_Enabled = true;
@@ -24,10 +24,10 @@ bool S_Debug = false;
 
 
 [Setting category="Position/Style" name="Position X" min=0.0f max=1.0f]
-float S_X = 0.0f;
+float S_X = 0.925f;
 
 [Setting category="Position/Style" name="Position Y" min=0.0f max=1.0f]
-float S_Y = 0.13f;
+float S_Y = 0.33f;
 
 [Setting category="Position/Style" name="Show background"]
 bool S_Background = true;
