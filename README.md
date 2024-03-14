@@ -3,7 +3,7 @@
 
 # Trophies
 
-Tells you how many trophy points you should expect to get based on placement in a live match. Currently only works for the qualifier and knockout for each Cup of the Day, but could work for other gamemodes (i.e. Time Attack) once those are better understood.
+Tells you how many trophy points you should expect to get based on placement in a live match. Currently only works for the qualifier and knockout for each Cup of the Day, but could work for other gamemodes (i.e. Time Attack) once those are better understood. If you DNF or someone else leaves the match in the round you are eliminated, your final position will probably be off by a couple places.
 
 Font, sizes, elements, and colors are all customizable. Go wild!
 
