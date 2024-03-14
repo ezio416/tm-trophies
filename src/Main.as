@@ -1,10 +1,10 @@
 // c 2024-02-16
-// m 2024-03-11
+// m 2024-03-14
 
 string       gameMode;
 string       myName;
 string       myUserId;
-const string title = "\\$FFF" + Icons::Trophy + "\\$G Trophies";
+const string title = "\\$AAA" + Icons::Trophy + "\\$G Trophies";
 
 void Main() {
     CTrackMania@ App = cast<CTrackMania@>(GetApp());
@@ -78,7 +78,7 @@ void RenderQualifier() {
     nvg::FontFace(font);
 
     nvg::FontSize(S_HeaderFontSize);
-    const string header = Icons::Trophy + " COT" + (edition == 1 ? "D" : edition == 2 ? "N" : edition == 3 ? "M" : "?") + " Qualifier " + Icons::Trophy;
+    const string header = "COT" + (edition == 1 ? "D" : edition == 2 ? "N" : edition == 3 ? "M" : "?") + " Qualifier";
     const vec2 headerSize = nvg::TextBounds(header);
 
     nvg::FontSize(S_FontSize);
@@ -285,7 +285,7 @@ void RenderKnockout() {
     nvg::FontFace(font);
 
     nvg::FontSize(S_HeaderFontSize);
-    const string header = Icons::Trophy + " COT" + (edition == 1 ? "D" : edition == 2 ? "N" : edition == 3 ? "M" : "?") + " Knockout " + Icons::Trophy;
+    const string header = "COT" + (edition == 1 ? "D" : edition == 2 ? "N" : edition == 3 ? "M" : "?") + " Knockout";
     const vec2 headerSize = nvg::TextBounds(header);
 
     nvg::FontSize(S_FontSize);
