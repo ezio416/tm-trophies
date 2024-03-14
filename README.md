@@ -7,6 +7,8 @@ Tells you how many trophy points you should expect to get based on placement in 
 
 Font, sizes, elements, and colors are all customizable. Go wild!
 
+Requires MLFeed dependency (and therefore MLHook).
+
 Big thanks to [THVNDR.TM](https://trackmania.io/#/player/2d05f1e4-064c-4b9f-99e8-fb28e6b658e8) for making a [spreadsheet](https://docs.google.com/spreadsheets/d/1LVioXnVeLPqwEi09SagfvXV5wZlyLS_nlimYYY4cvQM/htmlview#) outlining most things that earn trophies!
 
 <!-- ![Signed](https://img.shields.io/badge/Signed-Yes-00AA00) -->
