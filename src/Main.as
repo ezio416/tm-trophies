@@ -26,6 +26,7 @@ void Main() {
             totalPlayers = 0;
         }
 
+        sleep(1000);
         yield();
     }
 }
