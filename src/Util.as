@@ -1,6 +1,3 @@
-// c 2024-02-16
-// m 2024-03-01
-
 const string BLUE   = "\\$09D";
 const string CYAN   = "\\$2FF";
 const string GRAY   = "\\$888";

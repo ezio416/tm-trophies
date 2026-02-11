@@ -1,6 +1,3 @@
-// c 2024-02-29
-// m 2024-03-13
-
 int          challengeId   = 0;
 int          edition       = 0;
 const string mapMonitorUrl = "https://map-monitor.xk.io/cached";

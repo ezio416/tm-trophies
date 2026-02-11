@@ -1,6 +1,3 @@
-// c 2024-02-29
-// m 2024-03-11
-
 bool alive        = false;
 int  division     = 0;
 int  divisionRank = 0;

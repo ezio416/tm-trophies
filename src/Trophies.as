@@ -1,6 +1,3 @@
-// c 2024-02-16
-// m 2024-03-11
-
 const int trophy1 = 1;
 const int trophy2 = 10;
 const int trophy3 = 100;

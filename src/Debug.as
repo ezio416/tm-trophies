@@ -1,6 +1,3 @@
-// c 2024-02-26
-// m 2024-03-11
-
 int        debugCotdKnockoutDiv     = 0;
 int        debugCotdKnockoutDivRank = 0;
 int        debugCotdKnockoutPlayers = 0;

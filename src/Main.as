@@ -1,6 +1,3 @@
-// c 2024-02-16
-// m 2024-03-14
-
 string       gameMode;
 string       myName;
 string       myUserId;
