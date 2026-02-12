@@ -38,10 +38,10 @@ void RenderMenu() {
         if (UI::MenuItem(Icons::CheckSquareO + " Enabled", "", S_Enabled))
             S_Enabled = !S_Enabled;
 
-        if (UI::MenuItem(Icons::ClockO + " Qualifier", "", S_Qualifier))
+        if (UI::MenuItem(Icons::ClockO + " COTD Qualifier", "", S_Qualifier))
             S_Qualifier = !S_Qualifier;
 
-        if (UI::MenuItem(Icons::Kenney::Fist + " Knockout", "", S_Knockout))
+        if (UI::MenuItem(Icons::Kenney::Fist + " COTD Knockout", "", S_Knockout))
             S_Knockout = !S_Knockout;
 
         if (UI::MenuItem(Icons::Code + " Debug", "", S_Debug))
