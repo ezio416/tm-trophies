@@ -70,8 +70,8 @@ void RenderQualifier() {
 
     qualiRank = GetQualiRank();
 
-    const float posX = Draw::GetWidth() * S_X;
-    const float posY = Draw::GetHeight() * S_Y;
+    const float posX = Display::GetWidth() * S_X;
+    const float posY = Display::GetHeight() * S_Y;
 
     nvg::FontFace(font);
 
@@ -277,8 +277,8 @@ void RenderKnockout() {
 
     SetKoInfo();
 
-    const float posX = Draw::GetWidth() * S_X;
-    const float posY = Draw::GetHeight() * S_Y;
+    const float posX = Display::GetWidth() * S_X;
+    const float posY = Display::GetHeight() * S_Y;
 
     nvg::FontFace(font);
 
