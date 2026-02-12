@@ -76,7 +76,7 @@ void RenderQualifier() {
     nvg::FontFace(font);
 
     nvg::FontSize(S_HeaderFontSize);
-    const string header = "COT" + (edition == 1 ? "D" : edition == 2 ? "N" : edition == 3 ? "M" : "?") + " Qualifier";
+    const string header = Icons::Trophy + " COT" + (edition == 1 ? "D" : edition == 2 ? "N" : edition == 3 ? "M" : "?") + " Qualifier";
     const vec2 headerSize = nvg::TextBounds(header);
 
     nvg::FontSize(S_FontSize);
@@ -283,7 +283,7 @@ void RenderKnockout() {
     nvg::FontFace(font);
 
     nvg::FontSize(S_HeaderFontSize);
-    const string header = "COT" + (edition == 1 ? "D" : edition == 2 ? "N" : edition == 3 ? "M" : "?") + " Knockout";
+    const string header = Icons::Trophy + " COT" + (edition == 1 ? "D" : edition == 2 ? "N" : edition == 3 ? "M" : "?") + " Knockout";
     const vec2 headerSize = nvg::TextBounds(header);
 
     nvg::FontSize(S_FontSize);
