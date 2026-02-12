@@ -9,7 +9,12 @@ void RenderDebug() {
     if (!S_Debug)
         return;
 
-    UI::Begin(title + " (Debug)", S_Debug, UI::WindowFlags::AlwaysAutoResize);
+    const int flags = UI::GetDefaultWindowFlags()
+        | UI::WindowFlags::AlwaysAutoResize
+        | UI::WindowFlags::NoFocusOnAppearing
+    ;
+
+    if (UI::Begin(title + " (Debug)", S_Debug, flags)) {
         if (UI::BeginTable("##table-debug", 2, UI::TableFlags::RowBg)) {
             UI::PushStyleColor(UI::Col::TableRowBgAlt, rowBgAltColor);
 
@@ -85,6 +90,8 @@ void RenderDebug() {
             Tab_RaceData();
             Tab_KoData();
         UI::EndTabBar();
+    }
+
     UI::End();
 }
 
