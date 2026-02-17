@@ -44,6 +44,9 @@ void RenderMenu() {
         if (UI::MenuItem(Icons::Kenney::Fist + " COTD Knockout", "", S_Knockout))
             S_Knockout = !S_Knockout;
 
+        if (UI::MenuItem(Icons::Calendar + " History", "", S_History))
+            S_History = !S_History;
+
         if (UI::MenuItem(Icons::Code + " Debug", "", S_Debug))
             S_Debug = !S_Debug;
 
@@ -61,12 +64,20 @@ void Render() {
 
     RenderQualifier();
     RenderKnockout();
+    RenderHistory();
     RenderDebug();
 }
 
 void RenderQualifier() {
     if (!S_Qualifier || gameMode != "TM_COTDQualifications_Online")
         return;
+
+    const MLFeed::HookRaceStatsEventsBase_V4@ raceData = MLFeed::GetRaceData_V4();
+    if (raceData !is null && raceData.COTDQ_QualificationsProgress != MLFeed::QualificationStage::Running)
+        return;
+
+    // COTDQ_QualificationsProgress == Running
+    // else ServerReady or ServerEndingSoon or Null
 
     qualiRank = GetQualiRank();
 

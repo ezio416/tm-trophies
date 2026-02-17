@@ -16,6 +16,9 @@ bool S_Knockout = true;
 [Setting category="General" name="Big number separator"]
 string S_Separator = ",";
 
+[Setting category="General" name="Show history window"]
+bool S_History = false;
+
 [Setting category="General" name="Show debug window"]
 bool S_Debug = false;
 
