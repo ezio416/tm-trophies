@@ -68,6 +68,14 @@ void RenderQualifier() {
     if (!S_Qualifier || gameMode != "TM_COTDQualifications_Online")
         return;
 
+    const MLFeed::HookRaceStatsEventsBase_V4@ raceData = MLFeed::GetRaceData_V4();
+    if (true
+        and raceData !is null
+        and raceData.COTDQ_QualificationsProgress != MLFeed::QualificationStage::Running
+    ) {  // otherwise ServerReady or ServerEndingSoon or Null
+        return;
+    }
+
     qualiRank = GetQualiRank();
 
     const float posX = Display::GetWidth() * S_X;
