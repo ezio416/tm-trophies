@@ -399,7 +399,7 @@ void Tab_RaceData() {
             // UI::TableNextColumn();
             // UI::Text(raceData.type);
 
-            const MLFeed::PlayerCpInfo@ cpInfo = raceData.GetPlayer_V2(myName);
+            const MLFeed::PlayerCpInfo_V4@ cpInfo = raceData.GetPlayer_V4(myName);
             if (cpInfo !is null)
                 Table_CpInfo(cpInfo);
             else {
